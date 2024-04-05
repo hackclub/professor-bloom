@@ -1,0 +1,41 @@
+{
+  "name": "welcomebot",
+  "version": "0.0.0",
+  "description": "Powering the Hack Club Welcome Comitee, and keeping track of all members!",
+  "main": "src/app.js",
+  "maintainers": [
+    {
+      "name": "Jasper Mayone",
+      "email": "me@jaspermayone.com",
+      "url": "https://jaspermayone.com"
+    }
+  ],
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon src/index.ts",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint"
+  },
+  "keywords": [],
+  "author": "Jasper Mayone <me@jaspermayone.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@slack/bolt": "^3.17.1",
+    "airtable": "^0.12.2",
+    "dotenv": "^16.4.5",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.5",
+    "express": "^4.19.2",
+    "gts": "^5.3.0",
+    "nodemon": "^3.0.3",
+    "prettier": "^3.2.4",
+    "typescript": "~5.4.3"
+  }
+}
