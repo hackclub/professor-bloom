@@ -1,0 +1,55 @@
+{
+  "display_information": {
+    "name": "Stapler",
+    "description": "BOT COMING SOON",
+    "background_color": "#1b1c1f",
+    "long_description": "Super cool things build by @Jasper, coming very soon to a hack club slack near you! \r\n\r\nBot Broke? Got a better name for it? Slack Jasper or email jasper@hackclub.com\r\n\r\nOMG i still need to make this description longerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
+  },
+  "features": {
+    "app_home": {
+      "home_tab_enabled": true,
+      "messages_tab_enabled": false,
+      "messages_tab_read_only_enabled": true
+    },
+    "bot_user": {
+      "display_name": "Stapler",
+      "always_online": false
+    }
+  },
+  "oauth_config": {
+    "scopes": {
+      "user": [
+        "chat:write"
+      ],
+      "bot": [
+        "app_mentions:read",
+        "calls:read",
+        "canvases:read",
+        "channels:history",
+        "channels:join",
+        "channels:read",
+        "chat:write",
+        "chat:write.public",
+        "commands",
+        "emoji:read",
+        "groups:history",
+        "groups:write",
+        "im:history",
+        "im:read",
+        "im:write",
+        "reactions:read",
+        "reactions:write",
+        "users.profile:read",
+        "users:read",
+        "users:read.email",
+        "users:write",
+        "metadata.message:read"
+      ]
+    }
+  },
+  "settings": {
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false
+  }
+}
