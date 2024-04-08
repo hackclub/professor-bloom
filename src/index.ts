@@ -1,39 +1,49 @@
-import {App} from '@slack/bolt';
-import express from 'express';
-
-import * as dotenv from 'dotenv';
+import { App } from "@slack/bolt";
+import * as dotenv from "dotenv";
 dotenv.config();
+
+import * as events from "./events/index";
 
 // const node_environment = process.env.NODE_ENV;
 
-const slackApp = new App({
+const channels = {
+  dev: process.env.CHANNEL_welcome_bot_dev,
+  welcome: process.env.CHANNEL_welcome,
+  welcomeCommittee: process.env.CHANNEL_welcome_committee,
+  logging: process.env.CHANNEL_welcomebot_log,
+  superDev: process.env.CHANNEL_welcomebotsuperdev,
+  superDevLog: process.env.CHANNEL_welcomebotsuperdev_log,
+  log: "",
+};
+
+if (process.env.NODE_ENV === "development") {
+  console.log("Welcome bot running in development mode");
+  channels.log = channels.superDevLog!;
+} else {
+  console.log("Welcome bot running in production mode");
+  channels.log = channels.logging!;
+}
+
+const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   appToken: process.env.SLACK_APP_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
-  socketMode: false,
+  // socketMode: false,
 });
 
-const expressApp = express();
+(async (): Promise<void> => {
+  await app.start(Number(process.env.PORT) || 3000);
+  console.log("⚡️ Bolt app is running!");
 
-expressApp.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+  console.log(channels);
 
-// when bot is started, send a message to a specific channel
-
-(async () => {
-  // start express app
-  await expressApp.listen(process.env.PORT || 3000, () => {
-    console.log('⚡️ Express server is running!');
+  app.client.chat.postMessage({
+    channel: `${channels.superDevLog!}`,
+    text: `Professor Bloom enters, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
   });
 
-  // Start slack app
-  await slackApp.start(process.env.SLACK_PORT || 3001).then(() => {
-    console.log('⚡️ Bolt app is running!');
-    // send a message to a specific channel
-    slackApp.client.chat.postMessage({
-      channel: 'C06SU9YMC6R',
-      text: 'Stapler is staping! :stapler:',
-    });
-  });
+  for (const [event, handler] of Object.entries(events)) {
+    handler(app);
+    console.log(`Loaded event: ${event}`);
+  }
 })();
