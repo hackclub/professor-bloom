@@ -1,10 +1,19 @@
-import { App } from "@slack/bolt";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import * as events from "./events/index";
+import * as express from "express";
 
-// const node_environment = process.env.NODE_ENV;
+import { app } from "./app";
+import * as events from "./events/index";
+import { receiver } from "./express-receiver";
+
+import { health } from "./endpoints/health";
+import { index } from "./endpoints/index";
+
+receiver.router.use(express.json());
+receiver.router.get("/", index);
+receiver.router.get("/ping", health);
+receiver.router.get("/up", health);
 
 const channels = {
   dev: process.env.CHANNEL_welcome_bot_dev,
@@ -16,24 +25,14 @@ const channels = {
   log: "",
 };
 
-if (process.env.NODE_ENV === "development") {
-  console.log("Welcome bot running in development mode");
-  channels.log = channels.superDevLog!;
-} else {
-  console.log("Welcome bot running in production mode");
-  channels.log = channels.logging!;
-}
-
-const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  appToken: process.env.SLACK_APP_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  // socketMode: false,
+app.event("message", async (args) => {
+  // begin the firehose
+  // TODO: Log any actions regarding Prof Bloom, to bloom log
 });
 
 (async (): Promise<void> => {
   await app.start(Number(process.env.PORT) || 3000);
-  console.log("⚡️ Bolt app is running!");
+  console.log(`⚡️ Bolt app is running in env ${process.env.NODE_ENV}!`);
 
   console.log(channels);
 
