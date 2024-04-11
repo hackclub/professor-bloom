@@ -1,4 +1,4 @@
-// export { default as ChannelCreate } from "./channelCreate";
-// export { default as AppMention } from "./appMention";
+// export { default as channelCreate } from "./channelCreate";
+// export { default as appMention } from "./appMention";
 
 export { default as message } from "./message";
