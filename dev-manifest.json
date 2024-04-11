@@ -1,80 +1,80 @@
 {
-  "display_information": {
-      "name": "DEV Prof. Bloom",
-      "description": "Development bot for Prof Bloom",
-      "background_color": "#f06566"
-  },
-  "features": {
-      "app_home": {
-          "home_tab_enabled": true,
-          "messages_tab_enabled": false,
-          "messages_tab_read_only_enabled": true
-      },
-      "bot_user": {
-          "display_name": "[DEV] Professor Bloom",
-          "always_online": false
-      },
-      "slash_commands": [
-          {
-              "command": "/add-template",
-              "url": "https://professorbloom.hackclub.com/slack/events",
-              "description": "Adds a user template",
-              "usage_hint": "/add-template <template>",
-              "should_escape": false
-          },
-          {
-              "command": "/edit-template",
-              "url": "https://professorbloom.hackclub.com/slack/events",
-              "description": "Edits a user template",
-              "should_escape": false
-          }
-      ]
-  },
-  "oauth_config": {
-      "scopes": {
-          "user": [
-              "chat:write"
-          ],
-          "bot": [
-              "app_mentions:read",
-              "calls:read",
-              "canvases:read",
-              "channels:history",
-              "channels:join",
-              "channels:read",
-              "chat:write",
-              "chat:write.public",
-              "commands",
-              "emoji:read",
-              "groups:history",
-              "groups:write",
-              "im:history",
-              "im:read",
-              "im:write",
-              "reactions:read",
-              "reactions:write",
-              "users.profile:read",
-              "users:read",
-              "users:read.email",
-              "users:write",
-              "metadata.message:read"
-          ]
-      }
-  },
-  "settings": {
-      "event_subscriptions": {
-          "request_url": "https://professorbloom.hackclub.com/slack/events",
-          "bot_events": [
-              "app_mention",
-              "channel_created"
-          ]
-      },
-      "interactivity": {
-          "is_enabled": true,
-          "request_url": "https://professorbloom.hackclub.com/slack/events"
-      },
-      "org_deploy_enabled": false,
-      "socket_mode_enabled": false,
-      "token_rotation_enabled": false
-  }
+    "display_information": {
+        "name": "DEV Prof. Bloom",
+        "description": "Development bot for Prof Bloom",
+        "background_color": "#f06566"
+    },
+    "features": {
+        "app_home": {
+            "home_tab_enabled": true,
+            "messages_tab_enabled": false,
+            "messages_tab_read_only_enabled": true
+        },
+        "bot_user": {
+            "display_name": "[DEV] Professor Bloom",
+            "always_online": false
+        },
+        "slash_commands": [
+            {
+                "command": "/add-template",
+                "url": "https://c477-65-19-76-238.ngrok-free.app/slack/events",
+                "description": "Adds a user template",
+                "usage_hint": "/add-template <template>",
+                "should_escape": false
+            },
+            {
+                "command": "/edit-template",
+                "url": "https://c477-65-19-76-238.ngrok-free.app/slack/events",
+                "description": "Edits a user template",
+                "should_escape": false
+            }
+        ]
+    },
+    "oauth_config": {
+        "scopes": {
+            "user": [
+                "chat:write"
+            ],
+            "bot": [
+                "app_mentions:read",
+                "calls:read",
+                "canvases:read",
+                "channels:history",
+                "channels:join",
+                "channels:read",
+                "chat:write",
+                "chat:write.public",
+                "commands",
+                "emoji:read",
+                "groups:history",
+                "groups:write",
+                "im:history",
+                "im:read",
+                "im:write",
+                "reactions:read",
+                "reactions:write",
+                "users.profile:read",
+                "users:read",
+                "users:read.email",
+                "users:write",
+                "metadata.message:read"
+            ]
+        }
+    },
+    "settings": {
+        "event_subscriptions": {
+            "request_url": "https://7d82-65-19-76-238.ngrok-free.app/slack/events",
+            "bot_events": [
+                "app_mention",
+                "channel_created"
+            ]
+        },
+        "interactivity": {
+            "is_enabled": true,
+            "request_url": "https://c477-65-19-76-238.ngrok-free.app/slack/events"
+        },
+        "org_deploy_enabled": false,
+        "socket_mode_enabled": false,
+        "token_rotation_enabled": false
+    }
 }

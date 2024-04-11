@@ -4,10 +4,10 @@ dotenv.config();
 import * as express from "express";
 
 import { app } from "./app";
-import * as events from "./events/index";
 import * as commands from "./commands/index";
-import * as views from "./views/index";
+import * as events from "./events/index";
 import { receiver } from "./express-receiver";
+import * as views from "./views/index";
 
 import { health } from "./endpoints/health";
 import { index } from "./endpoints/index";
@@ -42,7 +42,6 @@ app.event("message", async ({ event, client }) => {
     channel: `${channels.superDevLog!}`,
     text: `Professor Bloom enters, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
   });
-
 
   for (const [event, handler] of Object.entries(events)) {
     handler(app);
