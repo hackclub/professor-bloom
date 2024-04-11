@@ -1,9 +1,8 @@
 {
   "display_information": {
-    "name": "Stapler",
-    "description": "BOT COMING SOON",
-    "background_color": "#1b1c1f",
-    "long_description": "Super cool things build by @Jasper, coming very soon to a hack club slack near you! \r\n\r\nBot Broke? Got a better name for it? Slack Jasper or email jasper@hackclub.com\r\n\r\nOMG i still need to make this description longerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
+    "name": "DEV Prof. Bloom",
+    "description": "Development bot for Prof Bloom",
+    "background_color": "#f06566"
   },
   "features": {
     "app_home": {
@@ -12,7 +11,7 @@
       "messages_tab_read_only_enabled": true
     },
     "bot_user": {
-      "display_name": "Stapler",
+      "display_name": "[DEV] Professor Bloom",
       "always_online": false
     }
   },
@@ -48,6 +47,13 @@
     }
   },
   "settings": {
+    "event_subscriptions": {
+      // "request_url": "https://professorbloom.hackclub.com/slack/events", / CHANGE ME TO YOUR NGROK URL
+      "bot_events": [
+        "app_mention",
+        "channel_created"
+      ]
+    },
     "org_deploy_enabled": false,
     "socket_mode_enabled": false,
     "token_rotation_enabled": false
