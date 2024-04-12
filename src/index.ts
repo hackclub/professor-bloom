@@ -4,8 +4,10 @@ dotenv.config();
 import * as express from "express";
 
 import { app } from "./app";
+import * as commands from "./commands/index";
 import * as events from "./events/index";
 import { receiver } from "./express-receiver";
+import * as views from "./views/index";
 
 import { health } from "./endpoints/health";
 import { index } from "./endpoints/index";
@@ -25,7 +27,7 @@ const channels = {
   log: "",
 };
 
-app.event("message", async (args) => {
+app.event("message", async ({ event, client }) => {
   // begin the firehose
   // TODO: Log any actions regarding Prof Bloom, to bloom log
 });
@@ -44,5 +46,15 @@ app.event("message", async (args) => {
   for (const [event, handler] of Object.entries(events)) {
     handler(app);
     console.log(`Loaded event: ${event}`);
+  }
+
+  for (const [command, handler] of Object.entries(commands)) {
+    handler(app);
+    console.log(`Loaded command: ${command}`);
+  }
+
+  for (const [view, handler] of Object.entries(views)) {
+    handler(app);
+    console.log(`Loaded view: ${view}`);
   }
 })();
