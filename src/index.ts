@@ -26,7 +26,6 @@ const channels = {
   superDev: transcript("channels.welcomebotsuperdev"),
   superDevLog: transcript("channels.welcomebotsuperdev-log"),
   jasper: transcript("channels.jasper"),
-  aarya: transcript("channels.aarya"),
 };
 
 app.event("message", async ({ event, client }) => {
@@ -41,16 +40,21 @@ app.event("message", async ({ event, client }) => {
   console.log(channels);
 
   let env = process.env.NODE_ENV!.toLowerCase();
+  let logC;
+
   if (env === "production") {
     env = "beautiful";
+    logC = channels.logging!;
   } else if (env === "development") {
     env = "lush";
+    logC = channels.superDevLog!;
   } else {
     env = "mysterious";
+    logC = channels.superDevLog!;
   }
 
   app.client.chat.postMessage({
-    channel: `${channels.superDevLog!}`,
+    channel: logC,
     text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
   });
 
