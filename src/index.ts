@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import * as express from "express";
+import express from "express";
 
 import { app } from "./app";
 import { receiver } from "./express-receiver";
