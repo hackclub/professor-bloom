@@ -22,9 +22,7 @@
     "./node_modules/@types",
     "./src/types"
   ],
-  // "include": [
-  //   "./src/**/*.ts",
-  //   "src/lib/transcript.ts",
-  //   "src/lib/commands.js"
-  // ]
+  "include": [
+    "./src",
+  ]
 }
