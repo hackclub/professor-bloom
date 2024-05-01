@@ -4,18 +4,18 @@ dotenv.config();
 import * as express from "express";
 
 import { app } from "./app";
-import * as commands from "./commands/index";
-import * as events from "./events/index";
 import { receiver } from "./express-receiver";
 import * as views from "./views/index";
 
 import { health } from "./endpoints/health";
 import { index } from "./endpoints/index";
+import { torielNewUser } from "./endpoints/toriel";
 
 receiver.router.use(express.json());
 receiver.router.get("/", index);
 receiver.router.get("/ping", health);
 receiver.router.get("/up", health);
+receiver.router.post("/toriel/newUser", torielNewUser);
 
 const channels = {
   dev: process.env.CHANNEL_welcome_bot_dev,
@@ -24,7 +24,6 @@ const channels = {
   logging: process.env.CHANNEL_welcomebot_log,
   superDev: process.env.CHANNEL_welcomebotsuperdev,
   superDevLog: process.env.CHANNEL_welcomebotsuperdev_log,
-  log: "",
 };
 
 app.event("message", async ({ event, client }) => {
@@ -38,20 +37,19 @@ app.event("message", async ({ event, client }) => {
 
   console.log(channels);
 
+  let env = process.env.NODE_ENV!.toLowerCase();
+  if (env === "production") {
+    env = "beautiful";
+  } else if (env === "development") {
+    env = "lush";
+  } else {
+    env = "mysterious";
+  }
+
   app.client.chat.postMessage({
     channel: `${channels.superDevLog!}`,
-    text: `Professor Bloom enters, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
+    text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
   });
-
-  for (const [event, handler] of Object.entries(events)) {
-    handler(app);
-    console.log(`Loaded event: ${event}`);
-  }
-
-  for (const [command, handler] of Object.entries(commands)) {
-    handler(app);
-    console.log(`Loaded command: ${command}`);
-  }
 
   for (const [view, handler] of Object.entries(views)) {
     handler(app);

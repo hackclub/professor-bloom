@@ -1,11 +1,21 @@
 import { App } from "@slack/bolt";
 
+import { channelCreateEvent } from "./events/channelCreate";
+// import { messageEvent } from "./events/message";
 import { receiver } from "./express-receiver";
+import { handleCommand } from "./lib/commands";
 
-const app = new App({
+export const app = new App({
+  token: process.env.SLACK_BOT_TOKEN!,
+  appToken: process.env.SLACK_APP_TOKEN!,
   signingSecret: process.env.SLACK_SIGNING_SECRET!,
   receiver,
 });
 
-const client: any = app.client;
-export { app, client };
+app.command("/bloom", handleCommand);
+app.command("/bloom-dev", handleCommand);
+
+// app.event("message", messageEvent);
+app.event("channel_created", channelCreateEvent);
+
+export const client: any = app.client;
