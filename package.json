@@ -24,11 +24,11 @@
     "@slack/bolt": "^3.17.1",
     "@types/express": "^4.17.21",
     "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "js-yaml": "^4.1.0",
     "nodemon": "^3.0.3"
   },
   "devDependencies": {
-    "express": "^4.19.2",
     "prisma": "^5.12.1",
     "ts-node": "^10.9.2",
     "typescript": "~5.4.3"

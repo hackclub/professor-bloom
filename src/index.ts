@@ -5,6 +5,7 @@ import express from "express";
 
 import { app } from "./app";
 import { receiver } from "./express-receiver";
+import { transcript } from "./lib/transcript";
 import * as views from "./views/index";
 
 import { health } from "./endpoints/health";
@@ -18,12 +19,14 @@ receiver.router.get("/up", health);
 receiver.router.post("/toriel/newUser", torielNewUser);
 
 const channels = {
-  dev: process.env.CHANNEL_welcome_bot_dev,
-  welcome: process.env.CHANNEL_welcome,
-  welcomeCommittee: process.env.CHANNEL_welcome_committee,
-  logging: process.env.CHANNEL_welcomebot_log,
-  superDev: process.env.CHANNEL_welcomebotsuperdev,
-  superDevLog: process.env.CHANNEL_welcomebotsuperdev_log,
+  dev: transcript("channels.welcome-bot-dev"),
+  welcome: transcript("channels.welcome"),
+  welcomeCommittee: transcript("channels.welcome-committee"),
+  logging: transcript("channels.welcomebot-log"),
+  superDev: transcript("channels.welcomebotsuperdev"),
+  superDevLog: transcript("channels.welcomebotsuperdev-log"),
+  jasper: transcript("channels.jasper"),
+  aarya: transcript("channels.aarya"),
 };
 
 app.event("message", async ({ event, client }) => {
