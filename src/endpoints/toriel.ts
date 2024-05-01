@@ -7,7 +7,11 @@ export async function torielNewUser(req: Request, res: Response) {
   try {
     const body = req.body;
 
-    if (!body.userId || !body.continent || !body.joinReason) {
+    if (process.env.NODE_ENV === "production") {
+      return res.status(200).json({
+        error: "This endpoint is disabled in production",
+      });
+    } else if (!body.userId || !body.continent || !body.joinReason) {
       return res.status(400).json({
         error:
           "Invalid request: Missing Args. Args should be userId, continent, and joinReason",
@@ -38,15 +42,9 @@ export async function torielNewUser(req: Request, res: Response) {
           "Invalid request: continent must be one of north_america, south_america, europe, asia, africa, australia, or antarctica",
       });
     } else {
-      if (process.env.NODE_ENV === "production") {
-        return res.status(200).json({
-          error: "This endpoint is disabled in production",
-        });
-      } else {
-        await sendWelcomeMsg(app.client, body).then(() => {
-          return res.status(200).json({ message: "Request received" });
-        });
-      }
+      await sendWelcomeMsg(app.client, body).then(() => {
+        return res.status(200).json({ message: "Request received" });
+      });
     }
   } catch (error) {
     console.error(error);
