@@ -48,16 +48,18 @@ const replaceErrors = (key: string, value: any): any => {
 };
 
 const transcript = (search: string, vars?: any): any => {
-  if (vars) {
-    console.log(
-      `I'm searching for words in my yaml file under "${search}". These variables are set: ${JSON.stringify(
-        vars,
-        replaceErrors
-      )}`
-    );
-  } else {
-    console.log(`I'm searching for words in my yaml file under "${search}"`);
-  }
+  // if (vars) {
+  //   console.log(
+  //     colors.blue(
+  //       `I'm searching for words in my yaml file under "${search}". These variables are set: ${JSON.stringify(
+  //         vars,
+  //         replaceErrors
+  //       )}`
+  //     )
+  //   );
+  // } else {
+  //   console.log(`I'm searching for words in my yaml file under "${search}"`);
+  // }
   const searchArr = search.split(".");
   const transcriptObj = loadTranscript();
   let dehydratedTarget;
