@@ -8,6 +8,10 @@ channels:
   jasper: "C06CDAYUXC0"
   aarya: "C027Y33B93L"
 
+# Dev: U06TPSMMEN9
+# Prod: U06SGHKA4RM
+selfUserID: U06TPSMMEN9
+
 jasper:
   - "omg, jasper? I love jasper!"
   - "I'm a big fan of jasper. I've been following him for years."

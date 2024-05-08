@@ -12,7 +12,6 @@ import { transcript } from "./lib/transcript";
 import { health } from "./endpoints/health";
 import { index } from "./endpoints/index";
 import { torielNewUser } from "./endpoints/toriel";
-import { ensureChannels } from "./util/ensureChannels";
 // import { views } from "./views/index";
 
 receiver.router.use(express.json());
@@ -41,6 +40,20 @@ const slackerTransport = createConnectTransport({
   httpVersion: "1.1",
 });
 
+let env = process.env.NODE_ENV!.toLowerCase();
+
+export let lchannel;
+if (env === "production") {
+  env = "beautiful";
+  lchannel = channels.logging!;
+} else if (env === "development") {
+  env = "lush";
+  lchannel = channels.superDevLog!;
+} else {
+  env = "mysterious";
+  lchannel = channels.superDevLog!;
+}
+
 (async (): Promise<void> => {
   /* Code for connecting to slacker api
   const client = createPromiseClient(ElizaService, slackerTransport);
@@ -52,30 +65,15 @@ const slackerTransport = createConnectTransport({
   console.log(res);
   */
 
-  app.start(process.env.PORT || 3001).then(async () => {
-    console.log(
-      colors.green(`⚡️ Bolt app is running in env ${process.env.NODE_ENV}!`)
-    );
+  app.start(process.env.PORT || 3001);
+  console.log(
+    colors.green(`⚡️ Bolt app is running in env ${process.env.NODE_ENV}!`)
+  );
 
-    await ensureChannels(app);
-  });
-
-  let env = process.env.NODE_ENV!.toLowerCase();
-
-  let logC;
-  if (env === "production") {
-    env = "beautiful";
-    logC = channels.logging!;
-  } else if (env === "development") {
-    env = "lush";
-    logC = channels.superDevLog!;
-  } else {
-    env = "mysterious";
-    logC = channels.superDevLog!;
-  }
+  // await ensureChannels(app);
 
   await app.client.chat.postMessage({
-    channel: logC,
+    channel: lchannel,
     text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
   });
   // for (const [view, handler] of Object.entries(views)) {

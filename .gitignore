@@ -3,3 +3,5 @@ prod.env
 node_modules/*
 .vscode/*
 prisma/migrations
+
+src/gen
