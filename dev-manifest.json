@@ -16,21 +16,18 @@
         },
         "slash_commands": [
             {
-                "command": "/add-template",
-                "url": "https://c477-65-19-76-238.ngrok-free.app/slack/events",
-                "description": "Adds a user template",
-                "usage_hint": "/add-template <template>",
-                "should_escape": false
-            },
-            {
-                "command": "/edit-template",
-                "url": "https://c477-65-19-76-238.ngrok-free.app/slack/events",
-                "description": "Edits a user template",
+                "command": "/bloom-dev",
+                "url": "https://7ad4-65-19-76-238.ngrok-free.app/slack/events",
+                "description": "Summons the professor.",
+                "usage_hint": "help",
                 "should_escape": false
             }
         ]
     },
     "oauth_config": {
+        "redirect_urls": [
+            "https://7ad4-65-19-76-238.ngrok-free.app/slack/oauth_redirect"
+        ],
         "scopes": {
             "user": [
                 "chat:write"
@@ -57,21 +54,22 @@
                 "users:read",
                 "users:read.email",
                 "users:write",
-                "metadata.message:read"
+                "metadata.message:read",
+                "mpim:history"
             ]
         }
     },
     "settings": {
         "event_subscriptions": {
-            "request_url": "https://7d82-65-19-76-238.ngrok-free.app/slack/events",
+            "request_url": "https://7ad4-65-19-76-238.ngrok-free.app/slack/events",
             "bot_events": [
                 "app_mention",
-                "channel_created"
+                "message.channels"
             ]
         },
         "interactivity": {
             "is_enabled": true,
-            "request_url": "https://c477-65-19-76-238.ngrok-free.app/slack/events"
+            "request_url": "https://7ad4-65-19-76-238.ngrok-free.app"
         },
         "org_deploy_enabled": false,
         "socket_mode_enabled": false,
