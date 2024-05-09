@@ -9,7 +9,7 @@ const sample = <T>(arr: T[]): T => {
 const loadTranscript = (): any => {
   try {
     const doc = yaml.load(
-      fs.readFileSync(path.resolve(__dirname, "../../transcript.yaml"), "utf8")
+      fs.readFileSync(path.resolve(__dirname, "../../transcript.yaml"), "utf8"),
     );
     return doc;
   } catch (e) {

@@ -25,13 +25,13 @@ export async function ensureChannels(app: App): Promise<void> {
 
   if (missingChannels.length === 0) {
     console.log(
-      colors.green("The Professor is in all channels he should have access to")
+      colors.green("The Professor is in all channels he should have access to"),
     );
   } else {
     console.warn(
       colors.yellow.bold.underline(
-        "⚠️ The Professor is not invited to these channels:" + missingChannels
-      )
+        "⚠️ The Professor is not invited to these channels:" + missingChannels,
+      ),
     );
   }
 }

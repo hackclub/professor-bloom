@@ -62,7 +62,7 @@ if (env === "production") {
 
   app.start(process.env.PORT || 3001);
   console.log(
-    colors.green(`⚡️ Bolt app is running in env ${process.env.NODE_ENV}!`)
+    colors.green(`⚡️ Bolt app is running in env ${process.env.NODE_ENV}!`),
   );
 
   // await ensureChannels(app);

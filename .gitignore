@@ -5,3 +5,4 @@ node_modules/*
 prisma/migrations
 
 src/gen
+yarn.lock
