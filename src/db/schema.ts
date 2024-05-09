@@ -10,7 +10,7 @@ import {
 const pgTable = pgTableCreator((name) => `bloom_${name}`);
 
 export const templates = pgTable("templates", {
-	id: serial("id").primaryKey(),
+	id: serial("id").notNull().primaryKey(),
 	name: text("name").notNull(),
 	content: text("content").notNull(),
 }, (table) => {
@@ -20,7 +20,7 @@ export const templates = pgTable("templates", {
 });
 
 export const user = pgTable("user", {
-	id: serial("id").primaryKey(),
+	id: serial("id").notNull().primaryKey(),
 	externalId: text("external_id").notNull(), // Slack ID
 	initialMessageContent: text("initial_message_content").notNull(),
 	initialMessageTimestamp: timestamp("initial_message_timestamp", {
