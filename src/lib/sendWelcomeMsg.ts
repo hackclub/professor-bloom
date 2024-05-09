@@ -71,4 +71,48 @@ export const sendWelcomeMsg = async (client: any, data: torielReq) => {
       },
     ],
   });
+
+  let ts = null;
+  try {
+    const result = await client.conversations.history({
+      channel: channel,
+      limit: 100,
+    });
+
+    const botMessages = result.messages?.filter(
+      (message: any) => message.bot_id
+    );
+    if (botMessages && botMessages.length > 0) {
+      ts = botMessages[0].ts;
+    }
+  } catch (error) {
+    console.error(`Failed to fetch bot message timestamp: ${error}`);
+  }
+
+  const joinReasontoAlert = [
+    {
+      reason: "trail",
+      alert: "A new trailblazer has joined the slack!",
+      userId: "U06QK6AG3RD",
+    },
+  ];
+
+  joinReasontoAlert.map(async (reason) => {
+    if (data.joinReason.includes(reason.reason)) {
+      await client.chat.postMessage({
+        thread_ts: ts,
+        channel,
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "plain_text",
+              text: "<@reason.userId> " + reason.alert,
+              emoji: true,
+            },
+          },
+        ],
+      });
+    }
+  });
 };

@@ -1,78 +1,73 @@
 {
-    "display_information": {
-        "name": "DEV Prof. Bloom",
-        "description": "Development bot for Prof Bloom",
-        "background_color": "#f06566"
+  "display_information": {
+    "name": "DEV Prof. Bloom",
+    "description": "Development bot for Prof Bloom",
+    "background_color": "#f06566"
+  },
+  "features": {
+    "app_home": {
+      "home_tab_enabled": true,
+      "messages_tab_enabled": false,
+      "messages_tab_read_only_enabled": true
     },
-    "features": {
-        "app_home": {
-            "home_tab_enabled": true,
-            "messages_tab_enabled": false,
-            "messages_tab_read_only_enabled": true
-        },
-        "bot_user": {
-            "display_name": "[DEV] Professor Bloom",
-            "always_online": false
-        },
-        "slash_commands": [
-            {
-                "command": "/bloom-dev",
-                "url": "https://7ad4-65-19-76-238.ngrok-free.app/slack/events",
-                "description": "Summons the professor.",
-                "usage_hint": "help",
-                "should_escape": false
-            }
-        ]
+    "bot_user": {
+      "display_name": "[DEV] Professor Bloom",
+      "always_online": false
     },
-    "oauth_config": {
-        "redirect_urls": [
-            "https://7ad4-65-19-76-238.ngrok-free.app/slack/oauth_redirect"
-        ],
-        "scopes": {
-            "user": [
-                "chat:write"
-            ],
-            "bot": [
-                "app_mentions:read",
-                "calls:read",
-                "canvases:read",
-                "channels:history",
-                "channels:join",
-                "channels:read",
-                "chat:write",
-                "chat:write.public",
-                "commands",
-                "emoji:read",
-                "groups:history",
-                "groups:write",
-                "im:history",
-                "im:read",
-                "im:write",
-                "reactions:read",
-                "reactions:write",
-                "users.profile:read",
-                "users:read",
-                "users:read.email",
-                "users:write",
-                "metadata.message:read",
-                "mpim:history"
-            ]
-        }
-    },
-    "settings": {
-        "event_subscriptions": {
-            "request_url": "https://7ad4-65-19-76-238.ngrok-free.app/slack/events",
-            "bot_events": [
-                "app_mention",
-                "message.channels"
-            ]
-        },
-        "interactivity": {
-            "is_enabled": true,
-            "request_url": "https://7ad4-65-19-76-238.ngrok-free.app"
-        },
-        "org_deploy_enabled": false,
-        "socket_mode_enabled": false,
-        "token_rotation_enabled": false
+    "slash_commands": [
+      {
+        "command": "/bloom-dev",
+        "url": "https://7ad4-65-19-76-238.ngrok-free.app/slack/events",
+        "description": "Summons the professor.",
+        "usage_hint": "help",
+        "should_escape": false
+      }
+    ]
+  },
+  "oauth_config": {
+    "redirect_urls": [
+      "https://7ad4-65-19-76-238.ngrok-free.app/slack/oauth_redirect"
+    ],
+    "scopes": {
+      "user": ["chat:write"],
+      "bot": [
+        "app_mentions:read",
+        "calls:read",
+        "canvases:read",
+        "channels:history",
+        "channels:join",
+        "channels:read",
+        "chat:write",
+        "chat:write.public",
+        "commands",
+        "emoji:read",
+        "groups:history",
+        "groups:write",
+        "im:history",
+        "im:read",
+        "im:write",
+        "reactions:read",
+        "reactions:write",
+        "users.profile:read",
+        "users:read",
+        "users:read.email",
+        "users:write",
+        "metadata.message:read",
+        "mpim:history"
+      ]
     }
+  },
+  "settings": {
+    "event_subscriptions": {
+      "request_url": "https://7ad4-65-19-76-238.ngrok-free.app/slack/events",
+      "bot_events": ["app_mention", "message.channels"]
+    },
+    "interactivity": {
+      "is_enabled": true,
+      "request_url": "https://7ad4-65-19-76-238.ngrok-free.app"
+    },
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false
+  }
 }
