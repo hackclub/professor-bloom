@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import { db } from "../db";
-import { templates } from "../db/schema";
+import { db } from "../../db";
+import { templates } from "../../db/schema";
 
 export type Template = {
 	id: number;
