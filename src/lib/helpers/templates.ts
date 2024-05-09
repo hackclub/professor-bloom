@@ -29,7 +29,7 @@ export async function getAllTemplates(): Promise<Template[]> {
 	return results;
 }
 
-export async function addTemplate(name: string, content: string): Promise<void> {
+export async function addTemplate(name: string, content: string): Promise<Template> {
 	const result = await db.insert(templates).values({ name, content }).returning();
 	
 	if (result.length === 0) {
@@ -37,6 +37,7 @@ export async function addTemplate(name: string, content: string): Promise<void> 
 	}
 
 	if(DEV) console.log(`DEBUG - Added template ${name} to database.`);
+	return result[0];
 }
 
 export async function editTemplate(name: string, content: string): Promise<void> {
