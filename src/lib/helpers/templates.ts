@@ -54,3 +54,9 @@ export async function editTemplate(name: string, content: string): Promise<void>
 
 	if(DEV) console.log(`DEBUG - Edited template ${name} in database. New content: ${content}`);
 }
+
+export async function deleteTemplate(name: string): Promise<void> {
+	await db.delete(templates).where(eq(templates.name, name));
+
+	if(DEV) console.log(`DEBUG - Deleted template ${name} from database.`);
+}
