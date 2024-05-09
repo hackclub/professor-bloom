@@ -11,6 +11,25 @@ export type UserTimestamps = {
 const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
 const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
 
+export async function addUser({ userId, joinReason }: {
+	userId: string;
+	joinReason: string;
+}): Promise<UserTimestamps> {
+	const result = await db
+		.insert(users)
+		.values({
+			externalId: userId,
+			initialMessageContent: joinReason,
+			initialMessageTimestamp: new Date(),
+		});
+
+	if (result.length === 0) {
+		throw new Error("User does not exist");
+	}
+
+	return result[0];
+}
+
 export async function getFollowupTimestamps(externalId: string): Promise<UserTimestamps> {
 	const result = await db
 		.select()
