@@ -4,8 +4,8 @@ type MessageEvent = Middleware<SlackEventMiddlewareArgs<"message">>;
 
 export const messageEvent: MessageEvent = async ({ message, client }) => {
   // set text to message.text
-  const text = message.subtype;
-  console.log(text);
+  // const text = message.
+  console.log("message recived");
   // if (
   //   text?.toLowerCase()?.includes("professorbloom" || "professor bloom") ||
   //   text?.includes(transcript("selfUserID"))

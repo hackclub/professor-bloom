@@ -4,7 +4,8 @@ import { transcript } from "./transcript";
 let channel;
 
 if (process.env.NODE_ENV === "production") {
-  channel = transcript("channels.welcome-committee");
+  // channel = transcript("channels.welcome-committee");
+  channel = "C0730FV6R41";
 } else {
   channel = transcript("channels.welcomebotsuperdev");
 }

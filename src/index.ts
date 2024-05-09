@@ -30,11 +30,6 @@ const channels = {
   jasper: transcript("channels.jasper"),
 };
 
-app.event("message", async ({ event, client }) => {
-  // begin the firehose
-  // TODO: Log any actions regarding Prof Bloom, to bloom log
-});
-
 const slackerTransport = createConnectTransport({
   baseUrl: "https://slacker-server-c2519a818fe5.herokuapp.com/",
   httpVersion: "1.1",
