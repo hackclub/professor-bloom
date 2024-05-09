@@ -19,7 +19,7 @@ export const templates = pgTable("templates", {
 	}
 });
 
-export const user = pgTable("user", {
+export const users = pgTable("users", {
 	id: serial("id").notNull().primaryKey(),
 	externalId: text("external_id").notNull(), // Slack ID
 	initialMessageContent: text("initial_message_content").notNull(),

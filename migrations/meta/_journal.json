@@ -8,6 +8,13 @@
       "when": 1715221164313,
       "tag": "0000_yellow_stardust",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1715222353526,
+      "tag": "0001_closed_pixie",
+      "breakpoints": true
     }
   ]
 }
