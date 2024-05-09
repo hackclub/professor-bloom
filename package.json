@@ -13,7 +13,9 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:gen-migration": "drizzle-kit generate:pg"
   },
   "keywords": [],
   "author": "Jasper Mayone <me@jaspermayone.com>",
@@ -28,11 +30,15 @@
     "@types/express": "^4.17.21",
     "colors": "^1.4.0",
     "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.30.10",
     "express": "^4.19.2",
     "js-yaml": "^4.1.0",
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.0.3",
+    "postgres": "^3.4.4",
+    "tsx": "^4.9.3"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.20.18",
     "prisma": "^5.13.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.4.3"
