@@ -33,7 +33,7 @@
     "nodemon": "^3.0.3"
   },
   "devDependencies": {
-    "prisma": "^5.12.1",
+    "prisma": "^5.13.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.4.3"
   }
