@@ -1,9 +1,9 @@
 import { getLogChannel } from "../func/getLogChannel";
 import { torielReq } from "../types/toriel";
 
-const channel = getLogChannel();
-
 export const sendWelcomeMsg = async (client: any, data: torielReq) => {
+  const channel = await getLogChannel();
+
   await client.chat.postMessage({
     channel,
     blocks: [
@@ -52,12 +52,12 @@ export const sendWelcomeMsg = async (client: any, data: torielReq) => {
           {
             type: "button",
             text: {
-              type: "plain_text",
+              type: "mrkdwn",
               text: "Lemme welcome them!",
               emoji: true,
             },
-            value: "id",
-            action_id: "approve",
+            value: JSON.stringify(data),
+            action_id: "lemmewelcomethem",
             style: "primary",
           },
         ],

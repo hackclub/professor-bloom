@@ -2,6 +2,7 @@ import { App } from "@slack/bolt";
 
 import { messageEvent } from "./events/message";
 import { receiver } from "./express-receiver";
+import { handleLemmeWelcomeThem } from "./lib/actions";
 import { handleCommand } from "./lib/commands";
 
 export const app = new App({
@@ -13,6 +14,10 @@ export const app = new App({
 
 app.command("/bloom", handleCommand);
 app.command("/bloom-dev", handleCommand);
+
+// app.view("lemmewelcomethem_form", );
+
+app.action("lemmewelcomethem", handleLemmeWelcomeThem);
 
 // fixme: why wont this work????
 app.event("message", messageEvent);
