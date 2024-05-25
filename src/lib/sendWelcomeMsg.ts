@@ -1,14 +1,7 @@
+import { getLogChannel } from "../func/getLogChannel";
 import { torielReq } from "../types/toriel";
-import { transcript } from "./transcript";
 
-let channel;
-
-if (process.env.NODE_ENV === "production") {
-  // channel = transcript("channels.welcome-committee");
-  channel = "C0730FV6R41";
-} else {
-  channel = transcript("channels.welcomebotsuperdev");
-}
+const channel = getLogChannel();
 
 export const sendWelcomeMsg = async (client: any, data: torielReq) => {
   await client.chat.postMessage({

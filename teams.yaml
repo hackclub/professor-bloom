@@ -1,0 +1,32 @@
+- id: clubs
+  keywords: ["starting a Hack Club", "club", "Hack Club leaders", "leaders"]
+
+- id: dos
+  keywords: []
+
+- id: hackathon
+  keywords: ["hackathon", "hackathons", "hack club hackathon"]
+
+- id: trail
+  keywords: ["trail", "the trail"]
+
+- id: ysws
+  keywords: ["ysws", "you ship we ship", "grant"]
+
+- id: blot
+  keywords: ["blot"]
+
+- id: sprig
+  keywords: ["sprig"]
+
+- id: onboard
+  keywords: ["onboard", "pcb", "PCB", "PCB Design", "electronics"]
+
+- id: bin
+  keywords: ["bin", "pcb"]
+
+- id: boba
+  keywords: ["boba", "bubble tea", "boba drops"]
+
+- id: hamradio
+  keywords: ["hamradio", "ham radio"]

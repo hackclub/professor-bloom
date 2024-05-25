@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 
-import { sendRawToSlack } from "util/sendRawToSlack";
 import { app } from "../app";
 import { sendWelcomeMsg } from "../lib/sendWelcomeMsg";
+import { sendRawToSlack } from "../util/sendRawToSlack";
 
 export async function torielNewUser(req: Request, res: Response) {
   try {

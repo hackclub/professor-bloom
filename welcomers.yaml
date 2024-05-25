@@ -1,0 +1,89 @@
+# Configure the welcomers for the community
+
+# Welcomers Admin
+- id: jasper
+  slack: U05NX48GL3T
+  github: jaspermayone
+  admin: true
+  welcomeNotfs: false
+
+- id: chris
+  slack: UDK5M9Y13
+  github: polytroper
+  welcomeNotfs: false
+
+- id: kaleo
+  slack: U033N1Y3YTB
+  github: VelocityDesign
+  admin: true
+  welcomeNotfs: true
+
+# ==============================================================================
+# HQ Staff
+- id: zrl
+  slack: U0266FRGP
+  github: zachlatta
+  admin: false
+  welcomeNotfs: false
+
+- id: max
+  slack: U0C7B14Q3
+  github: maxwofford
+  admin: false
+  welcomeNotfs: false
+
+- id: sarah
+  slack: U06L79991V0
+  github: sedowden
+  admin: false
+  welcomeNotfs: false
+
+- id: dev
+  slack: U0261EB1EG7
+  github: devenjadhav
+  admin: false
+  welcomeNotfs: false
+
+- id: thomas
+  slack: U041FQB8VK2
+  github: serenityUX
+  admin: false
+  welcomeNotfs: false
+
+# ==============================================================================
+# Rand
+
+- id: arav
+  slack: U01MPHKFZ7S
+  github: tregsthedev
+  admin: false
+  welcomeNotfs: false
+
+- id: kevin
+  slack: U015X5P6KAM
+  github: kvnyng
+  admin: false
+  welcomeNotfs: false
+
+# ==============================================================================
+# Welcomers
+
+- id: khaleel
+  slack: U032NMP21L1
+  github: khalby786
+  admin: false
+  welcomeNotfs: true
+
+- id: odysseus
+  slack: U04KXCYU4CD
+  github: odysseuskir
+  admin: false
+  welcomeNotfs: true
+
+- id: vivian
+  slack: U06CJNE9U02
+  github: vvireless
+
+- id: ryan
+  slack: U04KNK837S4
+  github: whatwareweb

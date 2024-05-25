@@ -1,4 +1,4 @@
-import { getLogChannel } from "func/getLogChannel";
+import { getLogChannel } from "../func/getLogChannel";
 
 export const sendRawToSlack = async (client: any, data: any) => {
   const logChannel = await getLogChannel();
