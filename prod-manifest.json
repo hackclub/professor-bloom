@@ -18,7 +18,9 @@
   },
   "oauth_config": {
     "scopes": {
-      "user": ["chat:write"],
+      "user": [
+        "im:write"
+      ],
       "bot": [
         "app_mentions:read",
         "calls:read",
@@ -48,7 +50,10 @@
   "settings": {
     "event_subscriptions": {
       "request_url": "https://professorbloom.hackclub.com/slack/events",
-      "bot_events": ["app_mention", "channel_created"]
+      "bot_events": [
+        "app_mention",
+        "channel_created"
+      ]
     },
     "org_deploy_enabled": false,
     "socket_mode_enabled": false,

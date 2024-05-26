@@ -5,18 +5,24 @@
   slack: U05NX48GL3T
   github: jaspermayone
   admin: true
+  classification: hq
   welcomeNotfs: false
+  oauthGranted: false
 
 - id: chris
   slack: UDK5M9Y13
   github: polytroper
+  classification: welcomer
   welcomeNotfs: false
+  oauthGranted: false
 
 - id: kaleo
   slack: U033N1Y3YTB
   github: VelocityDesign
   admin: true
+  classification: welcomer
   welcomeNotfs: true
+  oauthGranted: false
 
 # ==============================================================================
 # HQ Staff
@@ -24,31 +30,41 @@
   slack: U0266FRGP
   github: zachlatta
   admin: false
+  classification: hq
   welcomeNotfs: false
+  oauthGranted: false
 
 - id: max
   slack: U0C7B14Q3
   github: maxwofford
   admin: false
+  classification: hq
   welcomeNotfs: false
+  oauthGranted: false
 
 - id: sarah
   slack: U06L79991V0
   github: sedowden
   admin: false
+  classification: hq
   welcomeNotfs: false
+  oauthGranted: false
 
-- id: dev
+- id: deven
   slack: U0261EB1EG7
   github: devenjadhav
   admin: false
+  classification: hq
   welcomeNotfs: false
+  oauthGranted: false
 
 - id: thomas
   slack: U041FQB8VK2
   github: serenityUX
   admin: false
+  classification: hq
   welcomeNotfs: false
+  oauthGranted: false
 
 # ==============================================================================
 # Rand
@@ -57,13 +73,17 @@
   slack: U01MPHKFZ7S
   github: tregsthedev
   admin: false
+  classification: welcomer
   welcomeNotfs: false
+  oauthGranted: false
 
 - id: kevin
   slack: U015X5P6KAM
   github: kvnyng
   admin: false
+  classification: unclear
   welcomeNotfs: false
+  oauthGranted: false
 
 # ==============================================================================
 # Welcomers
@@ -72,18 +92,28 @@
   slack: U032NMP21L1
   github: khalby786
   admin: false
+  classification: welcomer
   welcomeNotfs: true
+  oauthGranted: false
 
 - id: odysseus
   slack: U04KXCYU4CD
   github: odysseuskir
   admin: false
+  classification: welcomer
   welcomeNotfs: true
+  oauthGranted: false
 
 - id: vivian
   slack: U06CJNE9U02
   github: vvireless
+  classification: welcomer
+  welcomeNotfs: true
+  oauthGranted: false
 
 - id: ryan
   slack: U04KNK837S4
   github: whatwareweb
+  classification: welcomer
+  welcomeNotfs: true
+  oauthGranted: false

@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -49,6 +50,8 @@ if (env === "production") {
   lchannel = channels.superDevLog!;
 }
 
+const prisma = new PrismaClient();
+
 (async (): Promise<void> => {
   /* Code for connecting to slacker api
   const client = createPromiseClient(ElizaService, slackerTransport);
@@ -60,9 +63,9 @@ if (env === "production") {
   console.log(res);
   */
 
-  app.start(process.env.PORT || 3001);
+  app.start(process.env.PORT || 3000);
   console.log(
-    colors.green(`⚡️ Bolt app is running in env ${process.env.NODE_ENV}!`),
+    colors.green(`⚡️ Bolt app is running in env ${process.env.NODE_ENV}!`)
   );
 
   // await ensureChannels(app);

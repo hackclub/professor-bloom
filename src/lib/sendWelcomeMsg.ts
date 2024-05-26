@@ -52,7 +52,7 @@ export const sendWelcomeMsg = async (client: any, data: torielReq) => {
           {
             type: "button",
             text: {
-              type: "mrkdwn",
+              type: "plain_text",
               text: "Lemme welcome them!",
               emoji: true,
             },
