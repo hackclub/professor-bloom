@@ -12,6 +12,7 @@ import { transcript } from "./lib/transcript";
 
 import { health } from "./endpoints/health";
 import { index } from "./endpoints/index";
+import { slackInstall, slackOAuthRedirect } from "./endpoints/slack";
 import { torielNewUser } from "./endpoints/toriel";
 // import { views } from "./views/index";
 
@@ -20,6 +21,8 @@ receiver.router.get("/", index);
 receiver.router.get("/ping", health);
 receiver.router.get("/up", health);
 receiver.router.post("/toriel/newUser", torielNewUser);
+receiver.router.get("/slack/install", slackInstall);
+receiver.router.get("/slack/oauth_redirect", slackOAuthRedirect);
 
 const channels = {
   dev: transcript("channels.welcome-bot-dev"),

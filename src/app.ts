@@ -1,4 +1,5 @@
-import { App, FileInstallationStore } from "@slack/bolt";
+import { App } from "@slack/bolt";
+import { InstallProvider } from "@slack/oauth";
 
 import { messageEvent } from "./events/message";
 import { receiver } from "./express-receiver";
@@ -13,9 +14,13 @@ export const app = new App({
   clientSecret: process.env.SLACK_CLIENT_SECRET!,
   stateSecret: process.env.SLACK_STATE_SECRET!,
   scopes: ["im:write"],
-  // fixme: implement in prod with own db
-  installationStore: new FileInstallationStore(),
   receiver,
+});
+
+export const installer = new InstallProvider({
+  clientId: process.env.SLACK_CLIENT_ID!,
+  clientSecret: process.env.SLACK_CLIENT_SECRET!,
+  stateSecret: process.env.SLACK_STATE_SECRET!,
 });
 
 app.command("/bloom", handleCommand);
