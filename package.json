@@ -29,6 +29,7 @@
     "@slack/bolt": "^3.17.1",
     "@slack/oauth": "^3.0.0",
     "@types/express": "^4.17.21",
+    "axios": "^1.7.2",
     "colors": "^1.4.0",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.10",

@@ -1,18 +1,17 @@
 import { PrismaClient } from "@prisma/client";
 import * as dotenv from "dotenv";
+import { app, installer } from "./app";
 dotenv.config();
 
 import { createConnectTransport } from "@connectrpc/connect-node";
 import colors from "colors";
 import express from "express";
 
-import { app } from "./app";
 import { receiver } from "./express-receiver";
 import { transcript } from "./lib/transcript";
 
 import { health } from "./endpoints/health";
 import { index } from "./endpoints/index";
-import { slackInstall, slackOAuthRedirect } from "./endpoints/slack";
 import { torielNewUser } from "./endpoints/toriel";
 // import { views } from "./views/index";
 
@@ -21,8 +20,27 @@ receiver.router.get("/", index);
 receiver.router.get("/ping", health);
 receiver.router.get("/up", health);
 receiver.router.post("/toriel/newUser", torielNewUser);
-receiver.router.get("/slack/install", slackInstall);
-receiver.router.get("/slack/oauth_redirect", slackOAuthRedirect);
+receiver.router.get("/slack/install", async (req, res) => {
+  await installer.handleInstallPath(req, res, undefined, {
+    scopes: [],
+    userScopes: ["im:write"],
+    // metadata: "some_metadata",
+  });
+});
+receiver.router.get("/slack/oauth_redirect", async (req, res) => {
+  await installer.handleCallback(req, res, {
+    success: (installation, installOptions) => {
+      res.send(
+        "You have successfully given Professor Bloom permissions! Please close this window."
+      );
+    },
+    failure: (error) => {
+      res.send(
+        "Womp Wopmp! Something went wrong! Please try again or contact Jasper for support."
+      );
+    },
+  });
+});
 
 const channels = {
   dev: transcript("channels.welcome-bot-dev"),

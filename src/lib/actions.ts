@@ -3,9 +3,13 @@ import YAML from "yaml";
 
 const welcomersFile = fs.readFileSync("welcomers.yaml", "utf8");
 
-const oauthURL = `https://hackclub.slack.com/oauth?client_id=${process.env.SLACK_CLIENT_ID}&user_scope=chat%3Awrite&redirect_uri=&state=&granular_bot_scope=1&single_channel=0&install_redirect=general&tracked=1&team=1`;
+let installUrl;
 
-//https://hackclub.slack.com/oauth?client_id=${process.env.SLACK_CLIENT_ID&user_scope=chat%3Awrite&redirect_uri=&state=&granular_bot_scope=1&single_channel=0&install_redirect=general&tracked=1&team=1
+if (process.env.NODE_ENV === "production") {
+  installUrl = "https://professorbloom.hackclub.com/slack/install";
+} else {
+  installUrl = "https://e68a-65-19-76-238.ngrok-free.app/slack/install";
+}
 
 export const handleLemmeWelcomeThem = async ({ ack, body, client, say }) => {
   await ack();
@@ -32,12 +36,12 @@ export const handleLemmeWelcomeThem = async ({ ack, body, client, say }) => {
   // get the user object (from the yaml file) for the userwhoopeneddatmodal
   const usr = yml.find((welcomer) => welcomer.slack === userwhoopeneddatmodal);
 
-  const usersWithOAuthScopes = await client.oauth.v2.access({
-    client_id: process.env.SLACK_CLIENT_ID,
-    client_secret: process.env.SLACK_CLIENT_SECRET,
+  // get users who have given the app permission to send messages on their behalf
+  const users = await client.auth.test({
+    token: process.env.SLACK_BOT_TOKEN,
   });
 
-  console.log(usersWithOAuthScopes);
+  console.log(users);
 
   // if (allIDs.includes(userwhoopeneddatmodal)) {
   //   // check if userwhoopeneddatmodal is in any of the arrays
