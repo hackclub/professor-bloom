@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model SlackToken {
+model SlackAppInstallation {
     @@map("slack_app_installation")
 
     id                              Int       @id @default(autoincrement())
@@ -39,4 +39,6 @@ model SlackToken {
     isEnterpriseInstall             Boolean   @default(false) @map("is_enterprise_install")
     tokenType                       String    @default("bot") @map("token_type")
     installedAt                     DateTime  @default(now()) @map("installed_at")
+    // This is an example custom property
+    memo                            String?
 }

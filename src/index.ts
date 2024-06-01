@@ -4,7 +4,8 @@ dotenv.config();
 import { createConnectTransport } from "@connectrpc/connect-node";
 import { PrismaClient } from "@prisma/client";
 import { PrismaInstallationStore } from "@seratch_/bolt-prisma";
-import { App, ExpressReceiver, LogLevel } from "@slack/bolt";
+import { App, ExpressReceiver } from "@slack/bolt";
+import { ConsoleLogger, LogLevel } from "@slack/logger";
 import colors from "colors";
 import express from "express";
 
@@ -17,14 +18,19 @@ import { handleCommand } from "./lib/commands";
 import { transcript } from "./lib/transcript";
 // import { views } from "./views/index";
 
-export const prismaClient = new PrismaClient();
-export const installationStore = new PrismaInstallationStore({
-  prismaTable: prismaClient.slackToken,
+const logger = new ConsoleLogger();
+logger.setLevel(LogLevel.DEBUG);
+
+const prismaClient = new PrismaClient({
+  log: [{ emit: "stdout", level: "query" }],
+});
+const installationStore = new PrismaInstallationStore({
+  prismaTable: prismaClient.slackAppInstallation,
   clientId: process.env.SLACK_CLIENT_ID,
+  logger,
 });
 
 export const receiver = new ExpressReceiver({
-  logLevel: LogLevel.DEBUG,
   signingSecret: process.env.SLACK_SIGNING_SECRET!,
   clientId: process.env.SLACK_CLIENT_ID!,
   clientSecret: process.env.SLACK_CLIENT_SECRET!,
@@ -54,7 +60,6 @@ export const receiver = new ExpressReceiver({
     "metadata.message:read",
     "mpim:history",
   ],
-  installationStore: installationStore,
   installerOptions: {
     directInstall: true,
     userScopes: [
@@ -65,6 +70,8 @@ export const receiver = new ExpressReceiver({
       "channels:write",
     ],
   },
+  installationStore,
+  logger,
 });
 
 receiver.router.use(express.json());
@@ -95,12 +102,12 @@ receiver.router.post("/toriel/newUser", torielNewUser);
 // });
 
 export const app = new App({
-  token: process.env.SLACK_BOT_TOKEN!,
+  // token: process.env.SLACK_BOT_TOKEN!,
   signingSecret: process.env.SLACK_SIGNING_SECRET!,
-  appToken: process.env.SLACK_APP_TOKEN!,
-  clientId: process.env.SLACK_CLIENT_ID!,
-  clientSecret: process.env.SLACK_CLIENT_SECRET!,
-  stateSecret: process.env.SLACK_STATE_SECRET!,
+  // appToken: process.env.SLACK_APP_TOKEN!,
+  // clientId: process.env.SLACK_CLIENT_ID!,
+  // clientSecret: process.env.SLACK_CLIENT_SECRET!,
+  // stateSecret: process.env.SLACK_STATE_SECRET!,
   receiver,
 });
 
