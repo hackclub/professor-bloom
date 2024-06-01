@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { app } from "../app";
+import { app } from "../index";
 import { sendWelcomeMsg } from "../lib/sendWelcomeMsg";
 import { sendRawToSlack } from "../util/sendRawToSlack";
 

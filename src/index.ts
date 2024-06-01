@@ -1,45 +1,123 @@
-import { PrismaClient } from "@prisma/client";
 import * as dotenv from "dotenv";
-import { app, installer } from "./app";
 dotenv.config();
 
 import { createConnectTransport } from "@connectrpc/connect-node";
+import { PrismaClient } from "@prisma/client";
+import { PrismaInstallationStore } from "@seratch_/bolt-prisma";
+import { App, ExpressReceiver, LogLevel } from "@slack/bolt";
 import colors from "colors";
 import express from "express";
-
-import { receiver } from "./express-receiver";
-import { transcript } from "./lib/transcript";
 
 import { health } from "./endpoints/health";
 import { index } from "./endpoints/index";
 import { torielNewUser } from "./endpoints/toriel";
+import { messageEvent } from "./events/message";
+import { handleLemmeWelcomeThem } from "./lib/actions";
+import { handleCommand } from "./lib/commands";
+import { transcript } from "./lib/transcript";
 // import { views } from "./views/index";
+
+export const prismaClient = new PrismaClient();
+export const installationStore = new PrismaInstallationStore({
+  prismaTable: prismaClient.slackToken,
+  clientId: process.env.SLACK_CLIENT_ID,
+});
+
+export const receiver = new ExpressReceiver({
+  logLevel: LogLevel.DEBUG,
+  signingSecret: process.env.SLACK_SIGNING_SECRET!,
+  clientId: process.env.SLACK_CLIENT_ID!,
+  clientSecret: process.env.SLACK_CLIENT_SECRET!,
+  stateSecret: process.env.SLACK_STATE_SECRET!,
+  scopes: [
+    "app_mentions:read",
+    "calls:read",
+    "canvases:read",
+    "channels:history",
+    "channels:join",
+    "channels:read",
+    "chat:write",
+    "chat:write.public",
+    "commands",
+    "emoji:read",
+    "groups:history",
+    "groups:write",
+    "im:history",
+    "im:read",
+    "im:write",
+    "reactions:read",
+    "reactions:write",
+    "users.profile:read",
+    "users:read",
+    "users:read.email",
+    "users:write",
+    "metadata.message:read",
+    "mpim:history",
+  ],
+  installationStore: installationStore,
+  installerOptions: {
+    directInstall: true,
+    userScopes: [
+      "chat:write",
+      "im:write",
+      "mpim:history",
+      "groups:write",
+      "channels:write",
+    ],
+  },
+});
 
 receiver.router.use(express.json());
 receiver.router.get("/", index);
 receiver.router.get("/ping", health);
 receiver.router.get("/up", health);
 receiver.router.post("/toriel/newUser", torielNewUser);
-receiver.router.get("/slack/install", async (req, res) => {
-  await installer.handleInstallPath(req, res, undefined, {
-    scopes: [],
-    userScopes: ["im:write"],
-    // metadata: "some_metadata",
-  });
+// receiver.router.get("/slack/install", async (req, res) => {
+//   await installer.handleInstallPath(req, res, undefined, {
+//     scopes: [],
+//     userScopes: ["im:write"],
+//     // metadata: "some_metadata",
+//   });
+// });
+// receiver.router.get("/slack/oauth_redirect", async (req, res) => {
+//   await installer.handleCallback(req, res, {
+//     success: (installation, installOptions) => {
+//       res.send(
+//         "You have successfully given Professor Bloom permissions! Please close this window."
+//       );
+//     },
+//     failure: (error) => {
+//       res.send(
+//         "Womp Womp! Something went wrong! Please try again or contact Jasper for support."
+//       );
+//     },
+//   });
+// });
+
+export const app = new App({
+  token: process.env.SLACK_BOT_TOKEN!,
+  signingSecret: process.env.SLACK_SIGNING_SECRET!,
+  appToken: process.env.SLACK_APP_TOKEN!,
+  clientId: process.env.SLACK_CLIENT_ID!,
+  clientSecret: process.env.SLACK_CLIENT_SECRET!,
+  stateSecret: process.env.SLACK_STATE_SECRET!,
+  receiver,
 });
-receiver.router.get("/slack/oauth_redirect", async (req, res) => {
-  await installer.handleCallback(req, res, {
-    success: (installation, installOptions) => {
-      res.send(
-        "You have successfully given Professor Bloom permissions! Please close this window."
-      );
-    },
-    failure: (error) => {
-      res.send(
-        "Womp Wopmp! Something went wrong! Please try again or contact Jasper for support."
-      );
-    },
-  });
+
+app.command("/bloom", handleCommand);
+app.command("/bloom-dev", handleCommand);
+
+// app.view("lemmewelcomethem_form", );
+
+app.action("lemmewelcomethem", handleLemmeWelcomeThem);
+
+// fixme: why wont this work????
+app.event("message", messageEvent);
+// app.event("channel_created", channelCreateEvent);
+
+const slackerTransport = createConnectTransport({
+  baseUrl: "https://slacker-server-c2519a818fe5.herokuapp.com/",
+  httpVersion: "1.1",
 });
 
 const channels = {
@@ -51,11 +129,6 @@ const channels = {
   superDevLog: transcript("channels.welcomebotsuperdev-log"),
   jasper: transcript("channels.jasper"),
 };
-
-const slackerTransport = createConnectTransport({
-  baseUrl: "https://slacker-server-c2519a818fe5.herokuapp.com/",
-  httpVersion: "1.1",
-});
 
 let env = process.env.NODE_ENV!.toLowerCase();
 
@@ -70,8 +143,6 @@ if (env === "production") {
   env = "mysterious";
   lchannel = channels.superDevLog!;
 }
-
-const prisma = new PrismaClient();
 
 (async (): Promise<void> => {
   /* Code for connecting to slacker api

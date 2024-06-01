@@ -6,3 +6,4 @@ prisma/migrations
 
 src/gen
 yarn.lock
+db/*
