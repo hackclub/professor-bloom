@@ -14,7 +14,7 @@ exports.templates = pgTable("templates", {
 });
 exports.users = pgTable("users", {
     id: (0, pg_core_1.serial)("id").notNull().primaryKey(),
-    externalId: (0, pg_core_1.text)("external_id").notNull(), // Slack ID
+    externalId: (0, pg_core_1.text)("external_id").notNull(),
     initialMessageContent: (0, pg_core_1.text)("initial_message_content").notNull(),
     initialMessageTimestamp: (0, pg_core_1.timestamp)("initial_message_timestamp", {
         precision: 3,

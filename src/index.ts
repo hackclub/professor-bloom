@@ -2,12 +2,13 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import { createConnectTransport } from "@connectrpc/connect-node";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 import { PrismaInstallationStore } from "@seratch_/bolt-prisma";
 import { App, ExpressReceiver } from "@slack/bolt";
 import { ConsoleLogger, LogLevel } from "@slack/logger";
 import colors from "colors";
 import express from "express";
+import { PrismaClient } from "../node_modules/.prisma/client";
 
 import { health } from "./endpoints/health";
 import { index } from "./endpoints/index";
