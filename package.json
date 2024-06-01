@@ -39,7 +39,6 @@
     "yaml": "^2.4.2"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.20.18",
     "prisma": "^5.13.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.4.3"
