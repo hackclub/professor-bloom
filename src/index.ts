@@ -169,10 +169,12 @@ if (env === "production") {
 
   // await ensureChannels(app);
 
-  await app.client.chat.postMessage({
-    channel: lchannel,
-    text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
-  });
+  //FIXME: this is broken
+  // await app.client.chat.postMessage({
+  //   channel: lchannel,
+  //   text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
+  // });
+
   // for (const [view, handler] of Object.entries(views)) {
   //   handler(app);
   //   console.log(`Loaded view: ${view}`);
