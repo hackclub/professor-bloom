@@ -26,7 +26,7 @@ const prismaClient = new PrismaClient({
   log: [{ emit: "stdout", level: "query" }],
 });
 const installationStore = new PrismaInstallationStore({
-  prismaTable: prismaClient.slackAppInstallation,
+  prismaTable: prismaClient.slackToken,
   clientId: process.env.SLACK_CLIENT_ID,
   logger,
 });
@@ -169,12 +169,18 @@ if (env === "production") {
   );
 
   // await ensureChannels(app);
-
+  const prismaInst = await installationStore.fetchInstallation({
+    teamId: "teamID",
+    enterpriseId: undefined,
+    isEnterpriseInstall: false,
+    userId: "userID", // 
+  });
   //FIXME: this is broken
-  // await app.client.chat.postMessage({
-  //   channel: lchannel,
-  //   text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
-  // });
+  await app.client.chat.postMessage({
+    token:   prismaInst.bot?.token,
+    channel: lchannel,
+    text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
+  });
 
   // for (const [view, handler] of Object.entries(views)) {
   //   handler(app);
