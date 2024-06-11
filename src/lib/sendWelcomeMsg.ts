@@ -73,7 +73,7 @@ export const sendWelcomeMsg = async (client: any, data: torielReq) => {
     });
 
     const botMessages = result.messages?.filter(
-      (message: any) => message.bot_id
+      (message: any) => message.bot_id,
     );
     if (botMessages && botMessages.length > 0) {
       ts = botMessages[0].ts;

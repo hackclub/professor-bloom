@@ -7,7 +7,7 @@ let teamCount = 10;
 const loadTeamFile = (): any => {
   try {
     const doc = yaml.load(
-      fs.readFileSync(path.resolve(__dirname, "../../teams.yaml"), "utf8")
+      fs.readFileSync(path.resolve(__dirname, "../../teams.yaml"), "utf8"),
     );
     return doc;
   } catch (e) {

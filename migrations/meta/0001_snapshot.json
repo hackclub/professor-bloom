@@ -30,9 +30,7 @@
       "indexes": {
         "templates_name_idx": {
           "name": "templates_name_idx",
-          "columns": [
-            "name"
-          ],
+          "columns": ["name"],
           "isUnique": true
         }
       },
@@ -73,9 +71,7 @@
       "indexes": {
         "user_external_id_idx": {
           "name": "user_external_id_idx",
-          "columns": [
-            "external_id"
-          ],
+          "columns": ["external_id"],
           "isUnique": true
         }
       },

@@ -165,7 +165,7 @@ if (env === "production") {
 
   app.start(process.env.PORT || 3000);
   console.log(
-    colors.green(`⚡️ Bolt app is running in env ${process.env.NODE_ENV}!`)
+    colors.green(`⚡️ Bolt app is running in env ${process.env.NODE_ENV}!`),
   );
 
   // await ensureChannels(app);
@@ -173,11 +173,11 @@ if (env === "production") {
     teamId: "teamID",
     enterpriseId: undefined,
     isEnterpriseInstall: false,
-    userId: "userID", // 
+    userId: "userID", //
   });
   //FIXME: this is broken
   await app.client.chat.postMessage({
-    token:   prismaInst.bot?.token,
+    token: prismaInst.bot?.token,
     channel: lchannel,
     text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
   });
