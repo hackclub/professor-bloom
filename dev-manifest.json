@@ -67,10 +67,7 @@
   "settings": {
     "event_subscriptions": {
       "request_url": "https://b100-65-19-76-238.ngrok-free.app/slack/events",
-      "bot_events": [
-        "app_mention",
-        "message.channels"
-      ]
+      "bot_events": ["app_mention", "message.channels"]
     },
     "interactivity": {
       "is_enabled": true,
