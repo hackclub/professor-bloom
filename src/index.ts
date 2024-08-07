@@ -2,13 +2,12 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import { createConnectTransport } from "@connectrpc/connect-node";
-// import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { PrismaInstallationStore } from "@seratch_/bolt-prisma";
 import { App, ExpressReceiver } from "@slack/bolt";
 import { ConsoleLogger, LogLevel } from "@slack/logger";
 import colors from "colors";
 import express from "express";
-import { PrismaClient } from "../node_modules/.prisma/client";
 
 import { health } from "./endpoints/health";
 import { index } from "./endpoints/index";
@@ -38,8 +37,6 @@ export const receiver = new ExpressReceiver({
   stateSecret: process.env.SLACK_STATE_SECRET!,
   scopes: [
     "app_mentions:read",
-    "calls:read",
-    "canvases:read",
     "channels:history",
     "channels:join",
     "channels:read",
@@ -51,24 +48,13 @@ export const receiver = new ExpressReceiver({
     "groups:write",
     "im:history",
     "im:read",
-    "im:write",
-    "reactions:read",
-    "reactions:write",
-    "users.profile:read",
-    "users:read",
-    "users:read.email",
-    "users:write",
-    "metadata.message:read",
+    "im:write", 
     "mpim:history",
   ],
   installerOptions: {
     directInstall: true,
     userScopes: [
       "chat:write",
-      "im:write",
-      "mpim:history",
-      "groups:write",
-      "channels:write",
     ],
   },
   installationStore,
