@@ -11,7 +11,7 @@ Contributions are encouraged and welcome!
 In order to run Professor Bloom locally, you'll need to [join the Hack Club Slack](https://hackclub.com/slack). From there, ask @creds to be added to the Toriel app on Slack.
 
 1. Clone this repository
-   `git clone https://github.com/hackclub/toriel && cd toriel`
+   `git clone https://github.com/hackclub/professor-bloom && cd professor-bloom`
 2. Install [ngrok](https://dashboard.ngrok.com/get-started/setup) (if you haven't already)
 3. Install dependencies
    `npm install`
