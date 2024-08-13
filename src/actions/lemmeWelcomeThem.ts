@@ -8,7 +8,6 @@ const installUrl =
     ? "https://professorbloom.hackclub.com/slack/install"
     : "https://ce94-171-76-2-166.ngrok-free.app/slack/install";
 
-
 const getWelcomersID = async (): Promise<string[]> => {
   const users = await prisma.user.findMany({
     select: { slack: true },
@@ -25,10 +24,17 @@ const getWelcomeTranscript = async (userID: string): Promise<string> => {
   return user?.transcript || "";
 };
 
+const isUserInList = (userID: string, list: string[]): boolean =>
+  list.includes(userID);
 
-const isUserInList = (userID: string, list: string[]): boolean => list.includes(userID);
-
-const openWelcomeModal = async (client, trigger_id: string, userID: string, extraData, transcript: string , userToken: string) => {
+const openWelcomeModal = async (
+  client,
+  trigger_id: string,
+  userID: string,
+  extraData,
+  transcript: string,
+  userToken: string,
+) => {
   try {
     return await client.views.open({
       trigger_id,
@@ -148,37 +154,44 @@ export const handleLemmeWelcomeThem = async ({ ack, body, client, action }) => {
   } catch (error) {
     console.error("Error fetching user token:", error);
     await client.chat.postEphemeral({
-        user: userID,
-        channel: body.channel.id,
-        blocks: [
-          {
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: "Ahoy! Looks like you need to grant Bloom access to send messages on your behalf. Please click the button below to grant access, and then try again!",
-            },
+      user: userID,
+      channel: body.channel.id,
+      blocks: [
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "Ahoy! Looks like you need to grant Bloom access to send messages on your behalf. Please click the button below to grant access, and then try again!",
           },
-          {
-            type: "actions",
-            elements: [
-              {
-                type: "button",
-                text: {
-                  type: "plain_text",
-                  text: "Grant Access",
-                  emoji: true,
-                },
-                style: "primary",
-                url: installUrl,
+        },
+        {
+          type: "actions",
+          elements: [
+            {
+              type: "button",
+              text: {
+                type: "plain_text",
+                text: "Grant Access",
+                emoji: true,
               },
-            ],
-          },
-        ],
-      });
+              style: "primary",
+              url: installUrl,
+            },
+          ],
+        },
+      ],
+    });
   }
 
   if (userToken !== undefined) {
-      const transcript = await getWelcomeTranscript(userID);
-      await openWelcomeModal(client, body.trigger_id, userID, extraData, transcript, userToken);
+    const transcript = await getWelcomeTranscript(userID);
+    await openWelcomeModal(
+      client,
+      body.trigger_id,
+      userID,
+      extraData,
+      transcript,
+      userToken,
+    );
   }
 };

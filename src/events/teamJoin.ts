@@ -18,7 +18,7 @@ const getContinentFromTimezone = (timezone: string): string => {
     case "Antarctica":
       return "Antarctica";
     case "America":
-        return `America (figure out which one from the city:P) ${city}`;
+      return `America (figure out which one from the city:P) ${city}`;
     case "Pacific":
       return "Oceania";
     default:
@@ -32,8 +32,8 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
     userId: event.user.id,
     continent,
     joinReason: "Unknown",
-  }
-  console.log(data)
+  };
+  console.log(data);
   await client.chat.postMessage({
     channel: "C06SU9YMC6R",
     blocks: [

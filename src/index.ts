@@ -25,7 +25,7 @@ const createLogger = (): ConsoleLogger => {
 
 const createInstallationStore = (
   prismaClient: PrismaClient,
-  logger: ConsoleLogger
+  logger: ConsoleLogger,
 ): PrismaInstallationStore => {
   return new PrismaInstallationStore({
     prismaTable: prismaClient.slackToken,
@@ -36,7 +36,7 @@ const createInstallationStore = (
 
 const createReceiver = (
   installationStore: PrismaInstallationStore,
-  logger: ConsoleLogger
+  logger: ConsoleLogger,
 ): ExpressReceiver => {
   const receiver = new ExpressReceiver({
     signingSecret: process.env.SLACK_SIGNING_SECRET!,
@@ -73,7 +73,9 @@ const createReceiver = (
 };
 
 const logger = createLogger();
-const prismaClient = new PrismaClient({ log: [{ emit: "stdout", level: "query" }] });
+const prismaClient = new PrismaClient({
+  log: [{ emit: "stdout", level: "query" }],
+});
 const installationStore = createInstallationStore(prismaClient, logger);
 const receiver = createReceiver(installationStore, logger);
 

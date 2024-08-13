@@ -1,10 +1,19 @@
-import { Middleware, SlackViewMiddlewareArgs, SlackViewAction } from "@slack/bolt";
+import {
+  Middleware,
+  SlackViewMiddlewareArgs,
+  SlackViewAction,
+} from "@slack/bolt";
 
 type ViewSubmissionEvent = Middleware<SlackViewMiddlewareArgs<SlackViewAction>>;
 
-export const submissionWelcome: ViewSubmissionEvent = async ({ ack, body, view, client }) => {
+export const submissionWelcome: ViewSubmissionEvent = async ({
+  ack,
+  body,
+  view,
+  client,
+}) => {
   await ack();
-  const [userToken, toSendUserID] = view.private_metadata.split(" ")
+  const [userToken, toSendUserID] = view.private_metadata.split(" ");
 
   const blockKey = Object.keys(view.state.values)[0];
   const text = view.state.values[blockKey].email.value;
@@ -12,7 +21,5 @@ export const submissionWelcome: ViewSubmissionEvent = async ({ ack, body, view, 
     token: userToken,
     channel: toSendUserID,
     text: text?.toString(),
-  })
-
+  });
 };
-
