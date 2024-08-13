@@ -1,17 +1,10 @@
-import { App } from "@slack/bolt";
+import { Middleware, SlackEventMiddlewareArgs } from "@slack/bolt";
 
-const appMention = async (app: App): Promise<void> => {
-  app.event("app_mention", async ({ event, client }) => {
-    try {
-      // respond to the message
-      await client.chat.postMessage({
-        channel: event.channel,
-        text: `Hello, <@${event.user}>! :wave:`,
-      });
-    } catch (e) {
-      console.error(e);
-    }
+type MentionEvent = Middleware<SlackEventMiddlewareArgs<"app_mention">>;
+
+export const appMention: MentionEvent = async ({ event, client }) => {
+  client.chat.postMessage({
+    channel: event.channel,
+    text: "Hi there!",
   });
 };
-
-export default appMention;
