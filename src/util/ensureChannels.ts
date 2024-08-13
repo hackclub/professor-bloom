@@ -12,7 +12,6 @@ export async function ensureChannels(app: App): Promise<void> {
     transcript("channels.welcomebot-log"),
     transcript("channels.welcomebotsuperdev"),
     transcript("channels.welcomebotsuperdev-log"),
-    transcript("channels.jasper"),
   ];
 
   let missingChannels: string[] = [];

@@ -1,1 +1,0 @@
-{"version":3,"file":"getLogChannel.js","sourceRoot":"","sources":["../../src/func/getLogChannel.ts"],"names":[],"mappings":";;;AAAA,kDAA+C;AAExC,KAAK,UAAU,aAAa;IACjC,IAAI,OAAO,CAAC,GAAG,CAAC,QAAQ,KAAK,YAAY,EAAE;QACzC,sDAAsD;QACtD,OAAO,aAAa,CAAC;KACtB;SAAM;QACL,OAAO,IAAA,uBAAU,EAAC,6BAA6B,CAAC,CAAC;KAClD;AACH,CAAC;AAPD,sCAOC"}
