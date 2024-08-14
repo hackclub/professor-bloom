@@ -33,9 +33,8 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
     continent,
     joinReason: "Unknown",
   };
-  console.log(data);
   await client.chat.postMessage({
-    channel: "C06SU9YMC6R",
+    channel: "C06T6J58SJW",
     blocks: [
       {
         type: "header",

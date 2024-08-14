@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 const installUrl =
   process.env.NODE_ENV === "production"
     ? "https://professorbloom.hackclub.com/slack/install"
-    : "https://ce94-171-76-2-166.ngrok-free.app/slack/install";
+    : "https://professor-bloom.hackclub.app/slack/install";
 
 const getWelcomersID = async (): Promise<string[]> => {
   const users = await prisma.user.findMany({
@@ -18,7 +18,7 @@ const getWelcomersID = async (): Promise<string[]> => {
 const getWelcomeTranscript = async (userID: string): Promise<string> => {
   const user = await prisma.user.findUnique({
     where: { slack: userID },
-    select: { transcript: true }, // Correct field name
+    select: { transcript: true },
   });
 
   return user?.transcript || "";

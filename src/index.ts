@@ -13,8 +13,11 @@ import { health } from "./endpoints/health";
 import { index } from "./endpoints/index";
 import { messageEvent } from "./events/message";
 import { appMention } from "./events/appMention";
+import { handleHomeTab } from "./events/home";
 import { teamJoin } from "./events/teamJoin";
 import { handleLemmeWelcomeThem } from "./actions/lemmeWelcomeThem";
+import { handleEditTemplate } from "./actions/editWelcomeTemplate";
+import { handleEditPromptSubmission } from "./views/editPrompt";
 import { submissionWelcome } from "./views/submissionWelcome";
 
 const createLogger = (): ConsoleLogger => {
@@ -86,9 +89,13 @@ const app = new App({
 // app.command("/bloom", handleCommand);
 // app.command("/bloom-dev", handleCommand);
 app.action("lemmewelcomethem", handleLemmeWelcomeThem);
+app.action("edit_welcome_template", handleEditTemplate);
+app.view("edit_prompt", handleEditPromptSubmission);
+
 app.event("message", messageEvent);
 app.event("app_mention", appMention);
 app.event("team_join", teamJoin);
+app.event("app_home_opened", handleHomeTab);
 app.view("lemmewelcomethem_form", submissionWelcome);
 
 const env = process.env.NODE_ENV!.toLowerCase();
