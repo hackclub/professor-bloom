@@ -18,7 +18,7 @@ const getWelcomersID = async (): Promise<string[]> => {
 const getWelcomeTranscript = async (userID: string): Promise<string> => {
   const user = await prisma.user.findUnique({
     where: { slack: userID },
-    select: { transcript: true }, 
+    select: { transcript: true },
   });
 
   return user?.transcript || "";
