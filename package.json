@@ -5,9 +5,9 @@
   "main": "index.js",
   "maintainers": [
     {
-      "name": "Jasper Mayone",
-      "email": "me@jaspermayone.com",
-      "url": "https://jaspermayone.com"
+      "name": "Kartikey S. Chauhan",
+      "email": "me@cskartikey.dev",
+      "url": "https://cskartikey.dev"
     }
   ],
   "scripts": {
@@ -17,7 +17,7 @@
     "fmt": "npx prettier --write ."
   },
   "keywords": [],
-  "author": "Jasper Mayone <me@jaspermayone.com>",
+  "author": "Kartikey S. Chauhan <me@cskartikey.dev>",
   "license": "MIT",
   "dependencies": {
     "@bufbuild/protobuf": "^1.9.0",
