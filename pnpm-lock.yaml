@@ -17,9 +17,9 @@ importers:
       '@connectrpc/connect-node':
         specifier: ^1.4.0
         version: 1.4.0(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.4.0(@bufbuild/protobuf@1.10.0))
-      '@cskartikey/bolt-extensions':
-        specifier: ^0.3.1
-        version: 0.3.1
+      '@cskartikey/bolt-prisma':
+        specifier: ^1.0.5
+        version: 1.0.5(prisma@5.19.1)
       '@prisma/client':
         specifier: ^5.19.1
         version: 5.19.1(prisma@5.19.1)
@@ -78,8 +78,8 @@ packages:
     peerDependencies:
       '@bufbuild/protobuf': ^1.4.2
 
-  '@cskartikey/bolt-extensions@0.3.1':
-    resolution: {integrity: sha512-vQFAi6uFpLhmIYJytMwDYJNMKphZp58NVCUNAgkU/3xV47XiD3C7DdfZcABscgd85q9CimJQF2n5BAoPQ6irjg==}
+  '@cskartikey/bolt-prisma@1.0.5':
+    resolution: {integrity: sha512-Bip7vVQQ8l/PsOr3oTogjZD3y4aJs2+okhJ1hkDDitUeqGOs01la17brRg11ZZiFhrGqd/tLaQU2I5plriKuog==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -99,6 +99,15 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
+  '@prisma/client@3.15.2':
+    resolution: {integrity: sha512-ErqtwhX12ubPhU4d++30uFY/rPcyvjk+mdifaZO5SeM21zS3t4jQrscy8+6IyB0GIYshl5ldTq6JSBo1d63i8w==}
+    engines: {node: '>=12.6'}
+    peerDependencies:
+      prisma: '*'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+
   '@prisma/client@5.19.1':
     resolution: {integrity: sha512-x30GFguInsgt+4z5I4WbkZP2CGpotJMUXy+Gl/aaUjHn2o1DnLYNTA+q9XdYmAQZM8fIIkvUiA2NpgosM3fneg==}
     engines: {node: '>=16.13'}
@@ -110,6 +119,9 @@ packages:
 
   '@prisma/debug@5.19.1':
     resolution: {integrity: sha512-lAG6A6QnG2AskAukIEucYJZxxcSqKsMK74ZFVfCTOM/7UiyJQi48v6TQ47d6qKG3LbMslqOvnTX25dj/qvclGg==}
+
+  '@prisma/engines-version@3.15.1-1.461d6a05159055555eb7dfb337c9fb271cbd4d7e':
+    resolution: {integrity: sha512-e3k2Vd606efd1ZYy2NQKkT4C/pn31nehyLhVug6To/q8JT8FpiMrDy7zmm3KLF0L98NOQQcutaVtAPhzKhzn9w==}
 
   '@prisma/engines-version@5.19.1-2.69d742ee20b815d88e17e54db4a2a7a3b30324e3':
     resolution: {integrity: sha512-xR6rt+z5LnNqTP5BBc+8+ySgf4WNMimOKXRn6xfNRDSpHvbOEmd7+qAOmzCrddEc4Cp8nFC0txU14dstjH7FXA==}
@@ -1049,7 +1061,15 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 1.10.0
 
-  '@cskartikey/bolt-extensions@0.3.1': {}
+  '@cskartikey/bolt-prisma@1.0.5(prisma@5.19.1)':
+    dependencies:
+      '@prisma/client': 3.15.2(prisma@5.19.1)
+      '@slack/logger': 3.0.0
+      '@slack/oauth': 2.6.3
+      '@types/node': 17.0.45
+    transitivePeerDependencies:
+      - debug
+      - prisma
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -1066,11 +1086,19 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
+  '@prisma/client@3.15.2(prisma@5.19.1)':
+    dependencies:
+      '@prisma/engines-version': 3.15.1-1.461d6a05159055555eb7dfb337c9fb271cbd4d7e
+    optionalDependencies:
+      prisma: 5.19.1
+
   '@prisma/client@5.19.1(prisma@5.19.1)':
     optionalDependencies:
       prisma: 5.19.1
 
   '@prisma/debug@5.19.1': {}
+
+  '@prisma/engines-version@3.15.1-1.461d6a05159055555eb7dfb337c9fb271cbd4d7e': {}
 
   '@prisma/engines-version@5.19.1-2.69d742ee20b815d88e17e54db4a2a7a3b30324e3': {}
 

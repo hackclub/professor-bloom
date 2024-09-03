@@ -3,7 +3,7 @@ dotenv.config();
 
 import { createConnectTransport } from "@connectrpc/connect-node";
 import { PrismaClient } from "@prisma/client";
-import { PrismaInstallationStore } from "@seratch_/bolt-prisma";
+import { PrismaInstallationStore } from "@cskartikey/bolt-prisma";
 import { App, ExpressReceiver } from "@slack/bolt";
 import { ConsoleLogger, LogLevel } from "@slack/logger";
 import colors from "colors";
