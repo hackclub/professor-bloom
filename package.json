@@ -32,7 +32,8 @@
     "colors": "^1.4.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
