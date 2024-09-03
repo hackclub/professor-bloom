@@ -5,180 +5,139 @@ type HomeEvent = Middleware<SlackEventMiddlewareArgs<"app_home_opened">>;
 
 const prisma = new PrismaClient();
 
-const getWelcomersID = async (): Promise<string[]> => {
-  const users = await prisma.user.findMany({
-    select: { slack: true },
-  });
-  return users.map((user) => user.slack);
-};
+const getAllWelcomers = async () => await prisma.user.findMany({
+  select: { slack: true, id: true, admin: true },
+});
 
-const createHomeView = (
-  event: any,
-  // pendingWelcomes: number,
-  // upcomingFollowUps: number,
-  // completedFollowUps: number,
-  isAdmin: boolean,
-  // welcomers: JSON[]
-): View => {
-  const blocks: any[] = [
+const createDashboardSection = (event: any): any[] => [
+  {
+    type: "header",
+    text: { type: "plain_text", text: "🌸 Professor Bloom's Dashboard 🌸", emoji: true },
+  },
+  {
+    type: "section",
+    text: { type: "mrkdwn", text: `*Welcome, <@${event.user}>!* :wave: Here's your garden overview:` },
+  },
+  { type: "divider" },
+  {
+    type: "section",
+    fields: [
+      { type: "mrkdwn", text: "*🌱 Pending Welcomes*\n*{wip}* new members" },
+      { type: "mrkdwn", text: "*🌼 Upcoming Follow-ups*\n*{wip}* check-ins" },
+      { type: "mrkdwn", text: "*🌻 Completed Follow-ups*\n*{wip}* this week" },
+    ],
+  },
+  {
+    type: "actions",
+    elements: [
+      {
+        type: "button",
+        text: { type: "plain_text", text: "View Pending Welcomes", emoji: true },
+        style: "primary",
+        action_id: "view_pending_welcomes",
+      },
+      {
+        type: "button",
+        text: { type: "plain_text", text: "Upcoming Follow-ups", emoji: true },
+        action_id: "view_upcoming_followups",
+      },
+    ],
+  },
+  { type: "divider" },
+  {
+    type: "section",
+    text: { type: "mrkdwn", text: "*Quick Actions*" },
+  },
+  {
+    type: "actions",
+    elements: [
+      {
+        type: "button",
+        text: { type: "plain_text", text: "Edit Welcome Template", emoji: true },
+        action_id: "edit_welcome_template",
+      },
+      {
+        type: "button",
+        text: { type: "plain_text", text: "View Statistics", emoji: true },
+        action_id: "view_statistics",
+      },
+    ],
+  },
+  {
+    type: "context",
+    elements: [{ type: "mrkdwn", text: ":seedling: Remember to take breaks and stay hydrated!" }],
+  },
+];
+
+const createAdminSection = async (): Promise<any[]> => {
+  const allWelcomers = await getAllWelcomers();
+  return [
+    { type: "divider" },
     {
       type: "header",
-      text: {
-        type: "plain_text",
-        text: "🌸 Professor Bloom's Dashboard 🌸",
-        emoji: true,
-      },
+      text: { type: "plain_text", text: "🛠 Admin Tools", emoji: true },
     },
     {
       type: "section",
-      text: {
-        type: "mrkdwn",
-        text: `*Hi <@${event.user}>!* :wave: Welcome to your dashboard! Here's what's happening in your garden today:`,
-      },
-    },
-    {
-      type: "divider",
-    },
-    {
-      type: "section",
-      text: {
-        type: "mrkdwn",
-        text: `*🌱 Pending Welcomes*: *{wip}* \n\n You have *{wip}* people waiting for a warm welcome. Let's make them feel at home!`,
-      },
-    },
-    {
-      type: "section",
-      text: {
-        type: "mrkdwn",
-        text: `*🌼 Upcoming Follow-ups*: *{wip}* \n\n Don't forget to check in with these people soon! 🌟`,
-      },
-    },
-    {
-      type: "section",
-      text: {
-        type: "mrkdwn",
-        text: `*🌻 Follow-ups Completed*: *{wip}* \n\n Well done! Thanks for helping with Hack Club magic! 💪`,
-      },
-    },
-    {
-      type: "divider",
+      text: { type: "mrkdwn", text: "*Welcomers Management*" },
     },
     {
       type: "actions",
       elements: [
         {
           type: "button",
-          text: {
-            type: "plain_text",
-            text: "🌷 Edit Welcome Template",
-            emoji: true,
-          },
+          text: { type: "plain_text", text: "➕ Add Welcomer", emoji: true },
           style: "primary",
-          action_id: "edit_welcome_template",
-        },
-        //   {
-        //     type: "button",
-        //     text: {
-        //       type: "plain_text",
-        //       text: "🌱 View All Follow-ups",
-        //       emoji: true,
-        //     },
-        //     action_id: "view_all_followups",
-        //   },
-      ],
-    },
-    {
-      type: "context",
-      elements: [
-        {
-          type: "mrkdwn",
-          text: ":seedling: Make sure to take care of yourself and stay hydrated!",
+          action_id: "add_welcomer",
         },
       ],
     },
+    ...allWelcomers.map((welcomer) => ({
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: `• <@${welcomer.slack}> (${welcomer.id})${welcomer.admin ? " 👑" : ""}`,
+      },
+      accessory: {
+        type: "overflow",
+        options: [
+          {
+            text: { type: "plain_text", text: "View/Edit Transcript", emoji: true },
+            value: `view_edit_transcript::${welcomer.slack}`,
+          },
+          {
+            text: { type: "plain_text", text: "Remove Welcomer", emoji: true },
+            value: `remove_welcomer::${welcomer.slack}`,
+          },
+          {
+            text: { type: "plain_text", text: `${welcomer.admin ? "Remove Admin" : "Make Admin"}`, emoji: true },
+            value: `toggle_admin::${welcomer.slack}`,
+          },
+        ],
+        action_id: "welcomer_actions",
+      },
+    })),
   ];
+};
 
-  // Admin section
-  // if (isAdmin) {
-  //   blocks.push(
-  //     {
-  //       type: "divider",
-  //     },
-  //     {
-  //       type: "header",
-  //       text: {
-  //         type: "plain_text",
-  //         text: "🛠 Admin Tools",
-  //         emoji: true,
-  //       },
-  //     },
-  //     {
-  //       type: "section",
-  //       text: {
-  //         type: "mrkdwn",
-  //         text: "*Welcomers Management*",
-  //       },
-  //     },
-  //     {
-  //       type: "section",
-  //       text: {
-  //         type: "mrkdwn",
-  //         text: welcomers.length
-  //           ? welcomers.map((welcomer) => `• <@${welcomer}>`).join("\n")
-  //           : "No welcomers assigned yet.",
-  //       },
-  //     },
-  //     {
-  //       type: "actions",
-  //       elements: [
-  //         {
-  //           type: "button",
-  //           text: {
-  //             type: "plain_text",
-  //             text: "➕ Add Welcomer",
-  //             emoji: true,
-  //           },
-  //           action_id: "add_welcomer",
-  //         },
-  //         ...welcomers.map((welcomer) => ({
-  //           type: "button",
-  //           text: {
-  //             type: "plain_text",
-  //             text: `❌ Remove <@${welcomer}>`,
-  //             emoji: true,
-  //           },
-  //           action_id: `remove_welcomer_${welcomer}`,
-  //         })),
-  //       ],
-  //     },
-  //     {
-  //       type: "context",
-  //       elements: [
-  //         {
-  //           type: "mrkdwn",
-  //           text: ":chart_with_upwards_trend: View and manage your welcoming team and stats here.",
-  //         },
-  //       ],
-  //     }
-  //   );
-  // }
+export const createHomeView = async (event: any, isAdmin: boolean): Promise<View> => ({
+  type: "home",
+  blocks: [...createDashboardSection(event), ...(isAdmin ? await createAdminSection() : [])],
+});
 
-  return {
-    type: "home",
-    blocks,
-  };
+export const isUserAdmin = async (userId: string): Promise<boolean> => {
+  const user = await prisma.user.findUnique({ where: { slack: userId }, select: { admin: true } });
+  return user?.admin || false;
 };
 
 export const handleHomeTab: HomeEvent = async ({ event, client }) => {
   try {
-    const welcomers = await getWelcomersID();
-    if (welcomers.includes(event.user)) {
-      await client.views.publish({
-        user_id: event.user,
-        view: createHomeView(event, false),
-      });
-    }
+    const isAdmin = await isUserAdmin(event.user);
+    await client.views.publish({
+      user_id: event.user,
+      view: await createHomeView(event, isAdmin),
+    });
   } catch (error) {
-    console.log("Error publishing home view:", error);
+    console.error("Error publishing home view:", error);
   }
 };

@@ -20,7 +20,7 @@ async function openEditModal(
       },
       title: {
         type: "plain_text",
-        text: `Editing ✏️`,
+        text: `Editing`,
       },
       blocks: [
         {
