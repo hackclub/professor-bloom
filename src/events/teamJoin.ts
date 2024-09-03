@@ -38,7 +38,7 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
     joinReason: "Unknown",
   };
   await client.chat.postMessage({
-    channel: "C06T6J58SJW",
+    channel: process.env.SLACK_CHANNEL_WELCOMERS || "None",
     blocks: [
       {
         type: "header",
