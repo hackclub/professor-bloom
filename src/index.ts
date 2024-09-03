@@ -3,7 +3,7 @@ dotenv.config();
 
 import { createConnectTransport } from "@connectrpc/connect-node";
 import { PrismaClient } from "@prisma/client";
-import { PrismaInstallationStore } from "@seratch_/bolt-prisma";
+import { PrismaInstallationStore } from "@cskartikey/bolt-prisma";
 import { App, ExpressReceiver } from "@slack/bolt";
 import { ConsoleLogger, LogLevel } from "@slack/logger";
 import colors from "colors";
@@ -21,8 +21,8 @@ import { handleEditPromptSubmission } from "./views/editPrompt";
 import {
   handleAddWelcomer,
   handleAddWelcomerSubmission,
-  handleWelcomerActions
-} from './actions/welcomerManagment';
+  handleWelcomerActions,
+} from "./actions/welcomerManagment";
 import { submissionWelcome } from "./views/submissionWelcome";
 
 const createLogger = (): ConsoleLogger => {
@@ -94,13 +94,13 @@ const app = new App({
 
 app.action("lemmewelcomethem", handleLemmeWelcomeThem);
 app.action("edit_welcome_template", handleEditTemplate);
-app.action('add_welcomer', handleAddWelcomer);
-app.action('welcomer_actions', handleWelcomerActions);
-app.view('add_welcomer_modal', handleAddWelcomerSubmission);
+app.action("add_welcomer", handleAddWelcomer);
+app.action("welcomer_actions", handleWelcomerActions);
+app.view("add_welcomer_modal", handleAddWelcomerSubmission);
 app.view("edit_prompt", handleEditPromptSubmission);
 
-app.event("message", messageEvent);
-app.event("app_mention", appMention);
+// app.event("message", messageEvent);
+// app.event("app_mention", appMention);
 app.event("team_join", teamJoin);
 app.event("app_home_opened", handleHomeTab);
 app.view("lemmewelcomethem_form", submissionWelcome);

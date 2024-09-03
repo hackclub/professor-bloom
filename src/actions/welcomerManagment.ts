@@ -5,17 +5,17 @@ const prisma = new PrismaClient();
 
 export const handleWelcomerActions = async ({ ack, body, action, client }) => {
   await ack();
-  const [actionType, welcomerId] = action.selected_option.value.split('::');
+  const [actionType, welcomerId] = action.selected_option.value.split("::");
   console.log(actionType, welcomerId);
 
   switch (actionType) {
-    case 'view_edit_transcript':
+    case "view_edit_transcript":
       await handleViewEditTranscript({ body, client, welcomerId });
       break;
-    case 'remove_welcomer':
+    case "remove_welcomer":
       await handleRemoveWelcomer({ body, client, welcomerId });
       break;
-    case 'toggle_admin':
+    case "toggle_admin":
       await handleToggleAdmin({ body, client, welcomerId });
       break;
     default:
@@ -222,11 +222,18 @@ export const handleAddWelcomer = async ({ ack, body, client }) => {
   }
 };
 
-export const handleAddWelcomerSubmission = async ({ ack, body, view, client }) => {
+export const handleAddWelcomerSubmission = async ({
+  ack,
+  body,
+  view,
+  client,
+}) => {
   await ack();
   const userId = view.state.values.user_select.selected_user.selected_user;
   const username = view.state.values.username_input.username.value;
-  const isAdmin = view.state.values.admin_select.admin_status.selected_option.value === "true";
+  const isAdmin =
+    view.state.values.admin_select.admin_status.selected_option.value ===
+    "true";
 
   try {
     await prisma.user.upsert({
