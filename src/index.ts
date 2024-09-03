@@ -99,8 +99,8 @@ app.action("welcomer_actions", handleWelcomerActions);
 app.view("add_welcomer_modal", handleAddWelcomerSubmission);
 app.view("edit_prompt", handleEditPromptSubmission);
 
-app.event("message", messageEvent);
-app.event("app_mention", appMention);
+// app.event("message", messageEvent);
+// app.event("app_mention", appMention);
 app.event("team_join", teamJoin);
 app.event("app_home_opened", handleHomeTab);
 app.view("lemmewelcomethem_form", submissionWelcome);
