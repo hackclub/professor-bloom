@@ -1,1 +1,2 @@
-web: pnpm run postinstall && pnpm start
+release: npx prisma migrate deploy
+web: pnpm start
