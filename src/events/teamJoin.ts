@@ -27,6 +27,10 @@ const getContinentFromTimezone = (timezone: string): string => {
 };
 
 export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
+  if (event.user.is_bot) {
+    return;
+  }
+
   const continent = getContinentFromTimezone(event.user.tz);
   const data = {
     userId: event.user.id,
@@ -56,23 +60,22 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
       },
       {
         type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `> *:technologist:  User:* <@${event.user.id}>`,
-        },
+        fields: [
+          {
+            type: "mrkdwn",
+            text: `*:technologist: User:*\n<@${event.user.id}>`,
+          },
+          {
+            type: "mrkdwn",
+            text: `*:earth_americas: Region:*\n${continent}`,
+          }
+        ],
       },
       {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `> *:earth_americas:  Continent:* ${continent}`,
-        },
-      },
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `> *:speech_balloon:  Join Reason:* (WIP)`,
+          text: "*:speech_balloon: Join Reason:* To be updated",
         },
       },
       {
@@ -82,12 +85,21 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
             type: "button",
             text: {
               type: "plain_text",
-              text: "Lemme welcome them!",
+              text: "🙋 Welcome Them!",
               emoji: true,
             },
             value: JSON.stringify(data),
             action_id: "lemmewelcomethem",
             style: "primary",
+          },
+        ],
+      },
+      {
+        type: "context",
+        elements: [
+          {
+            type: "mrkdwn",
+            text: "Remember to give them a warm welcome! 💖",
           },
         ],
       },

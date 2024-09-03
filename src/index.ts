@@ -18,6 +18,11 @@ import { teamJoin } from "./events/teamJoin";
 import { handleLemmeWelcomeThem } from "./actions/lemmeWelcomeThem";
 import { handleEditTemplate } from "./actions/editWelcomeTemplate";
 import { handleEditPromptSubmission } from "./views/editPrompt";
+import {
+  handleAddWelcomer,
+  handleAddWelcomerSubmission,
+  handleWelcomerActions
+} from './actions/welcomerManagment';
 import { submissionWelcome } from "./views/submissionWelcome";
 
 const createLogger = (): ConsoleLogger => {
@@ -86,10 +91,12 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET!,
   receiver,
 });
-// app.command("/bloom", handleCommand);
-// app.command("/bloom-dev", handleCommand);
+
 app.action("lemmewelcomethem", handleLemmeWelcomeThem);
 app.action("edit_welcome_template", handleEditTemplate);
+app.action('add_welcomer', handleAddWelcomer);
+app.action('welcomer_actions', handleWelcomerActions);
+app.view('add_welcomer_modal', handleAddWelcomerSubmission);
 app.view("edit_prompt", handleEditPromptSubmission);
 
 app.event("message", messageEvent);
