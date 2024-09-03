@@ -56,23 +56,22 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
       },
       {
         type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `> *:technologist:  User:* <@${event.user.id}>`,
-        },
+        fields: [
+          {
+            type: "mrkdwn",
+            text: `*:earth_americas: Region:*\n${continent}`,
+          },
+          {
+            type: "mrkdwn",
+            text: `*:calendar: Joined:*\n<!date^${Math.floor(Date.now() / 1000)}^{date_short_pretty}|Today>`,
+          },
+        ],
       },
       {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `> *:earth_americas:  Continent:* ${continent}`,
-        },
-      },
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `> *:speech_balloon:  Join Reason:* (WIP)`,
+          text: "*:speech_balloon: Join Reason:* To be updated",
         },
       },
       {
@@ -82,12 +81,21 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
             type: "button",
             text: {
               type: "plain_text",
-              text: "Lemme welcome them!",
+              text: "🙋 Welcome Them!",
               emoji: true,
             },
             value: JSON.stringify(data),
             action_id: "lemmewelcomethem",
             style: "primary",
+          },
+        ],
+      },
+      {
+        type: "context",
+        elements: [
+          {
+            type: "mrkdwn",
+            text: "Remember to give them a warm welcome! 💖",
           },
         ],
       },
