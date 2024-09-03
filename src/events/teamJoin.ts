@@ -27,6 +27,10 @@ const getContinentFromTimezone = (timezone: string): string => {
 };
 
 export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
+  if (event.user.is_bot) {
+    return;
+  }
+
   const continent = getContinentFromTimezone(event.user.tz);
   const data = {
     userId: event.user.id,
@@ -59,12 +63,12 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
         fields: [
           {
             type: "mrkdwn",
-            text: `*:earth_americas: Region:*\n${continent}`,
+            text: `*:technologist: User:*\n<@${event.user.id}>`,
           },
           {
             type: "mrkdwn",
-            text: `*:calendar: Joined:*\n<!date^${Math.floor(Date.now() / 1000)}^{date_short_pretty}|Today>`,
-          },
+            text: `*:earth_americas: Region:*\n${continent}`,
+          }
         ],
       },
       {
