@@ -68,7 +68,7 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
           {
             type: "mrkdwn",
             text: `*:earth_americas: Region:*\n${continent}`,
-          }
+          },
         ],
       },
       {

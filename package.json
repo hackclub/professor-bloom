@@ -14,8 +14,7 @@
     "start": "node dist/index.js",
     "build": "tsc",
     "dev": "nodemon src/index.ts",
-    "fmt": "npx prettier --write .",
-    "postinstall": "prisma generate && npm run build"
+    "fmt": "npx prettier --write ."
   },
   "keywords": [],
   "author": "Kartikey S. Chauhan <me@cskartikey.dev>",

@@ -21,8 +21,8 @@ import { handleEditPromptSubmission } from "./views/editPrompt";
 import {
   handleAddWelcomer,
   handleAddWelcomerSubmission,
-  handleWelcomerActions
-} from './actions/welcomerManagment';
+  handleWelcomerActions,
+} from "./actions/welcomerManagment";
 import { submissionWelcome } from "./views/submissionWelcome";
 
 const createLogger = (): ConsoleLogger => {
@@ -94,9 +94,9 @@ const app = new App({
 
 app.action("lemmewelcomethem", handleLemmeWelcomeThem);
 app.action("edit_welcome_template", handleEditTemplate);
-app.action('add_welcomer', handleAddWelcomer);
-app.action('welcomer_actions', handleWelcomerActions);
-app.view('add_welcomer_modal', handleAddWelcomerSubmission);
+app.action("add_welcomer", handleAddWelcomer);
+app.action("welcomer_actions", handleWelcomerActions);
+app.view("add_welcomer_modal", handleAddWelcomerSubmission);
 app.view("edit_prompt", handleEditPromptSubmission);
 
 app.event("message", messageEvent);
