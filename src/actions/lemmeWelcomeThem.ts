@@ -27,6 +27,24 @@ const getWelcomeTranscript = async (userID: string): Promise<string> => {
 const isUserInList = (userID: string, list: string[]): boolean =>
   list.includes(userID);
 
+const replacePlaceholders = async (client, transcript: string, userId: string): Promise<string> => {
+  try {
+    const userInfo = await client.users.info({ user: userId });
+    const realName = userInfo.user.real_name || userInfo.user.name;
+    const [firstName, ...lastNameParts] = realName.split(' ');
+    const lastName = lastNameParts.join(' ');
+    
+    return transcript
+      .replace(/<mention>/g, `<@${userId}>`)
+      .replace(/<real_name>/g, realName)
+      .replace(/<first_name>/g, firstName)
+      .replace(/<last_name>/g, lastName);
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+    return transcript;
+  }
+};
+
 const openWelcomeModal = async (
   client,
   trigger_id: string,
@@ -36,6 +54,8 @@ const openWelcomeModal = async (
   userToken: string,
 ) => {
   try {
+    const processedTranscript = await replacePlaceholders(client, transcript, extraData.userId);
+    
     return await client.views.open({
       trigger_id,
       view: {
@@ -74,7 +94,7 @@ const openWelcomeModal = async (
             type: "input",
             element: {
               type: "plain_text_input",
-              initial_value: transcript,
+              initial_value: processedTranscript,
               multiline: true,
               action_id: "email",
               focus_on_load: true,
