@@ -54,16 +54,11 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
   await prisma.welcomeEvent.create({
     data: {
       newUserId: event.user.id,
-      status: "pending",
-      welcomerId: "none",
-      joinedAt: new Date(),
     },
   });
 
   const userInfo = await client.users.info({ user: event.user.id });
-  console.log("User Info", userInfo);
   const userEmail = userInfo.user?.profile?.email;
-  console.log("User Email", userEmail);
 
   const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID ?? '');
 
@@ -75,12 +70,10 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
       maxRecords: 1,
       fields: ['Reason']
     }).firstPage();
-    console.log("Records", records);
     if (records.length > 0) {
       joinReason = records[0].get('Reason') as string || "Unknown";
     }
   }
-  console.log("Join Reason", joinReason);
   const continent = getContinentFromTimezone(event.user.tz);
   const data = {
     userId: event.user.id,

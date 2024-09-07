@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 export const handleWelcomerActions = async ({ ack, body, action, client }) => {
   await ack();
   const [actionType, welcomerId] = action.selected_option.value.split("::");
-  console.log(actionType, welcomerId);
 
   switch (actionType) {
     case "view_edit_transcript":
@@ -72,8 +71,6 @@ const handleViewEditTranscript = async ({ body, client, welcomerId }) => {
 
 const handleRemoveWelcomer = async ({ body, client, welcomerId }) => {
   try {
-    console.log("Removing welcomer", welcomerId);
-    console.log("Body", body);
     await prisma.user.delete({
       where: { slack: welcomerId },
     });

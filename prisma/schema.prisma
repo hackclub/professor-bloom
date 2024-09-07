@@ -60,9 +60,9 @@ model SlackStats {
 model WelcomeEvent {
   id             Int      @id @default(autoincrement())
   newUserId      String
-  welcomer       User     @relation(fields: [welcomerId], references: [slack])
-  welcomerId     String
-  status         String
+  welcomer       User?    @relation(fields: [welcomerId], references: [slack])
+  welcomerId     String?
+  status         String   @default("pending")
   joinedAt       DateTime @default(now())
   completedAt    DateTime?
   timeToWelcome  Int?
