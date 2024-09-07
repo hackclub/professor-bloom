@@ -51,7 +51,7 @@ const handleViewEditTranscript = async ({ body, client, welcomerId }) => {
             element: {
               type: "plain_text_input",
               multiline: true,
-              initial_value: welcomer?.transcript || "",
+              initial_value: welcomer?.transcript ?? "",
               action_id: "transcript_text",
             },
             label: {

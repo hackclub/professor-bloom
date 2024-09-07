@@ -1,8 +1,11 @@
 import { Middleware, SlackEventMiddlewareArgs } from "@slack/bolt";
 import Airtable from 'airtable';
+import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
 
 dotenv.config();
+
+const prisma = new PrismaClient();
 
 type TeamJoinEvent = Middleware<SlackEventMiddlewareArgs<"team_join">>;
 
@@ -34,6 +37,27 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
   if (event.user.is_bot) {
     return;
   }
+
+  await prisma.slackStats.upsert({
+    where: { id: 1 },
+    update: {
+      totalJoins: { increment: 1 },
+      pendingWelcomes: { increment: 1 },
+    },
+    create: {
+      id: 1,
+      totalJoins: 1,
+      pendingWelcomes: 1,
+    },
+  });
+  
+  await prisma.welcomeEvent.create({
+    data: {
+      newUserId: event.user.id,
+      status: "pending",
+      welcomerId: "none",
+    },
+  });
 
   const userInfo = await client.users.info({ user: event.user.id });
   console.log("User Info", userInfo);

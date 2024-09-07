@@ -42,10 +42,24 @@ model SlackToken {
 model User {
   id              String   @id
   slack           String   @unique
-  // github          String
   admin           Boolean
-  // classification  String
-  // welcomeNotfs    Boolean
-  // oauthGranted    Boolean
-  transcript    String
+  transcript      String
+  welcomesGiven   Int      @default(0)
+}
+
+model SlackStats {
+  id                  Int      @id @default(autoincrement())
+  totalJoins          Int      @default(0)
+  totalWelcomed       Int      @default(0)
+  pendingWelcomes     Int      @default(0)
+  lastUpdated         DateTime @default(now())
+}
+
+model WelcomeEvent {
+  id          Int      @id @default(autoincrement())
+  newUserId   String
+  welcomerId  String
+  status      String   // "pending" or "completed"
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
 }

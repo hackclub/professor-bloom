@@ -52,6 +52,7 @@ const openWelcomeModal = async (
   extraData,
   transcript: string,
   userToken: string,
+  originalTs: string,
 ) => {
   try {
     const processedTranscript = await replacePlaceholders(client, transcript, extraData.userId);
@@ -60,7 +61,7 @@ const openWelcomeModal = async (
       trigger_id,
       view: {
         callback_id: "lemmewelcomethem_form",
-        private_metadata: `${userToken} ${extraData.userId}`,
+        private_metadata: `${userToken} ${extraData.userId} ${originalTs}`,
         title: {
           type: "plain_text",
           text: `Welcome a New User!`,
@@ -212,6 +213,7 @@ export const handleLemmeWelcomeThem = async ({ ack, body, client, action }) => {
       extraData,
       transcript,
       userToken,
+      body.message.ts,
     );
   }
 };
