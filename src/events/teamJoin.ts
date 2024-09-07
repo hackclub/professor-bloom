@@ -56,6 +56,7 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
       newUserId: event.user.id,
       status: "pending",
       welcomerId: "none",
+      joinedAt: new Date(),
     },
   });
 

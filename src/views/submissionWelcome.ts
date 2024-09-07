@@ -58,6 +58,34 @@ export const submissionWelcome: ViewSubmissionEvent = async ({
     }
   }
 
+  const welcomeEvent = await prisma.welcomeEvent.findFirst({
+    where: { newUserId: toSendUserID, status: "pending" },
+    orderBy: { joinedAt: 'desc' },
+  });
+
+  if (welcomeEvent) {
+    const now = new Date();
+    const timeToWelcome = now.getTime() - welcomeEvent.joinedAt.getTime();
+
+    await prisma.welcomeEvent.update({
+      where: { id: welcomeEvent.id },
+      data: {
+        welcomerId: body.user.id,
+        status: "completed",
+        completedAt: now,
+        timeToWelcome: timeToWelcome,
+      },
+    });
+
+    await prisma.user.update({
+      where: { slack: body.user.id },
+      data: {
+        welcomesGiven: { increment: 1 },
+        totalWelcomeTime: { increment: timeToWelcome },
+      },
+    });
+  }
+
   await prisma.slackStats.update({
     where: { id: 1 },
     data: {

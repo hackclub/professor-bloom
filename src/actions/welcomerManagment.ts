@@ -18,6 +18,9 @@ export const handleWelcomerActions = async ({ ack, body, action, client }) => {
     case "toggle_admin":
       await handleToggleAdmin({ body, client, welcomerId });
       break;
+    case "view_welcomed_users":
+      await handleViewWelcomedUsers({ body, client, welcomerId });
+      break;
     default:
       console.error(`Unknown action type: ${actionType}`);
   }
@@ -127,6 +130,61 @@ const handleToggleAdmin = async ({ body, client, welcomerId }) => {
       user: body.user.id,
       channel: body.user.id,
       text: "An error occurred while updating admin status. Please try again.",
+    });
+  }
+};
+
+const handleViewWelcomedUsers = async ({ body, client, welcomerId }) => {
+  try {
+    const welcomedUsers = await prisma.welcomeEvent.findMany({
+      where: { welcomerId: welcomerId, status: "completed" },
+      orderBy: { completedAt: 'desc' },
+      select: { newUserId: true, completedAt: true },
+    });
+
+    const blocks = [
+      {
+        type: "header",
+        text: {
+          type: "plain_text",
+          text: `Users Welcomed by <@${welcomerId}>`,
+          emoji: true,
+        },
+      },
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: welcomedUsers.length > 0
+            ? welcomedUsers.map(user => `• <@${user.newUserId}> - ${user.completedAt?.toLocaleDateString() ?? 'Date not available'}`).join('\n')
+            : "No users welcomed yet.",
+        },
+      },
+    ];
+
+    await client.views.open({
+      trigger_id: body.trigger_id,
+      view: {
+        type: "modal",
+        title: {
+          type: "plain_text",
+          text: "Welcomed Users",
+          emoji: true,
+        },
+        close: {
+          type: "plain_text",
+          text: "Close",
+          emoji: true,
+        },
+        blocks: blocks,
+      },
+    });
+  } catch (error) {
+    console.error("Error viewing welcomed users:", error);
+    await client.chat.postEphemeral({
+      user: body.user.id,
+      channel: body.user.id,
+      text: "An error occurred while fetching welcomed users. Please try again.",
     });
   }
 };

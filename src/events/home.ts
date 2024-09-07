@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 const getAllWelcomers = async () =>
   await prisma.user.findMany({
-    select: { slack: true, id: true, admin: true },
+    select: { slack: true, id: true, admin: true, welcomesGiven: true, totalWelcomeTime: true },
   });
 
 const createDashboardSection = (event: any): any[] => [
@@ -92,16 +92,87 @@ const createDashboardSection = (event: any): any[] => [
 
 const createAdminSection = async (): Promise<any[]> => {
   const allWelcomers = await getAllWelcomers();
-  return [
+  const stats = await prisma.slackStats.findFirst({ where: { id: 1 } });
+  const totalWelcomed = stats?.totalWelcomed || 0;
+  const pendingWelcomes = stats?.pendingWelcomes || 0;
+
+  const globalStats = [
     { type: "divider" },
     {
       type: "header",
-      text: { type: "plain_text", text: "🛠 Admin Tools", emoji: true },
+      text: { type: "plain_text", text: "🌍 Global Stats", emoji: true },
     },
     {
       type: "section",
-      text: { type: "mrkdwn", text: "*Welcomers Management*" },
+      fields: [
+        { type: "mrkdwn", text: `*Total Welcomed:*\n${totalWelcomed}` },
+        { type: "mrkdwn", text: `*Pending Welcomes:*\n${pendingWelcomes}` },
+      ],
     },
+  ];
+
+  const welcomerStatsBlocks = [
+    { type: "divider" },
+    {
+      type: "header",
+      text: { type: "plain_text", text: "👥 Welcomer Stats", emoji: true },
+    },
+  ];
+
+  const welcomerStats = await Promise.all(
+    allWelcomers.map(async (welcomer) => {
+      const user = await prisma.user.findUnique({
+        where: { slack: welcomer.slack },
+        select: { welcomesGiven: true, totalWelcomeTime: true },
+      });
+
+      const avgWelcomeTime = user?.welcomesGiven
+        ? Math.round(user.totalWelcomeTime / user.welcomesGiven / 60000)
+        : 0;
+
+      return {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `• <@${welcomer.slack}> (${welcomer.id})${
+            welcomer.admin ? " 👑" : ""
+          }\n  Welcomes: ${user?.welcomesGiven || 0} | Avg Time: ${avgWelcomeTime} min`,
+        },
+        accessory: {
+          type: "overflow",
+          options: [
+            {
+              text: { type: "plain_text", text: "View/Edit Transcript", emoji: true },
+              value: `view_edit_transcript::${welcomer.slack}`,
+            },
+            {
+              text: { type: "plain_text", text: "Remove Welcomer", emoji: true },
+              value: `remove_welcomer::${welcomer.slack}`,
+            },
+            {
+              text: {
+                type: "plain_text",
+                text: `${welcomer.admin ? "Remove Admin" : "Make Admin"}`,
+                emoji: true,
+              },
+              value: `toggle_admin::${welcomer.slack}`,
+            },
+            {
+              text: { type: "plain_text", text: "View Welcomed Users", emoji: true },
+              value: `view_welcomed_users::${welcomer.slack}`,
+            },
+          ],
+          action_id: "welcomer_actions",
+        },
+      };
+    })
+  );
+
+  return [
+    ...globalStats,
+    ...welcomerStatsBlocks,
+    ...welcomerStats,
+    { type: "divider" },
     {
       type: "actions",
       elements: [
@@ -113,39 +184,6 @@ const createAdminSection = async (): Promise<any[]> => {
         },
       ],
     },
-    ...allWelcomers.map((welcomer) => ({
-      type: "section",
-      text: {
-        type: "mrkdwn",
-        text: `• <@${welcomer.slack}> (${welcomer.id})${welcomer.admin ? " 👑" : ""}`,
-      },
-      accessory: {
-        type: "overflow",
-        options: [
-          {
-            text: {
-              type: "plain_text",
-              text: "View/Edit Transcript",
-              emoji: true,
-            },
-            value: `view_edit_transcript::${welcomer.slack}`,
-          },
-          {
-            text: { type: "plain_text", text: "Remove Welcomer", emoji: true },
-            value: `remove_welcomer::${welcomer.slack}`,
-          },
-          {
-            text: {
-              type: "plain_text",
-              text: `${welcomer.admin ? "Remove Admin" : "Make Admin"}`,
-              emoji: true,
-            },
-            value: `toggle_admin::${welcomer.slack}`,
-          },
-        ],
-        action_id: "welcomer_actions",
-      },
-    })),
   ];
 };
 
