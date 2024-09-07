@@ -10,93 +10,27 @@ const getAllWelcomers = async () =>
     select: { slack: true, id: true, admin: true, welcomesGiven: true, totalWelcomeTime: true },
   });
 
-const createDashboardSection = (event: any): any[] => [
-  {
-    type: "header",
-    text: {
-      type: "plain_text",
-      text: "🌸 Professor Bloom's Dashboard 🌸",
-      emoji: true,
-    },
-  },
-  {
-    type: "section",
-    text: {
-      type: "mrkdwn",
-      text: `*Welcome, <@${event.user}>!* :wave: Here's your garden overview:`,
-    },
-  },
-  { type: "divider" },
-  {
-    type: "section",
-    fields: [
-      { type: "mrkdwn", text: "*🌱 Pending Welcomes*\n*{wip}* new members" },
-      { type: "mrkdwn", text: "*🌼 Upcoming Follow-ups*\n*{wip}* check-ins" },
-      { type: "mrkdwn", text: "*🌻 Completed Follow-ups*\n*{wip}* this week" },
-    ],
-  },
-  {
-    type: "actions",
-    elements: [
-      {
-        type: "button",
-        text: {
-          type: "plain_text",
-          text: "View Pending Welcomes",
-          emoji: true,
-        },
-        style: "primary",
-        action_id: "view_pending_welcomes",
-      },
-      {
-        type: "button",
-        text: { type: "plain_text", text: "Upcoming Follow-ups", emoji: true },
-        action_id: "view_upcoming_followups",
-      },
-    ],
-  },
-  { type: "divider" },
-  {
-    type: "section",
-    text: { type: "mrkdwn", text: "*Quick Actions*" },
-  },
-  {
-    type: "actions",
-    elements: [
-      {
-        type: "button",
-        text: {
-          type: "plain_text",
-          text: "Edit Welcome Template",
-          emoji: true,
-        },
-        action_id: "edit_welcome_template",
-      },
-      {
-        type: "button",
-        text: { type: "plain_text", text: "View Statistics", emoji: true },
-        action_id: "view_statistics",
-      },
-    ],
-  },
-  {
-    type: "context",
-    elements: [
-      {
-        type: "mrkdwn",
-        text: ":seedling: Remember to take breaks and stay hydrated!",
-      },
-    ],
-  },
-];
-
-const createAdminSection = async (): Promise<any[]> => {
-  const allWelcomers = await getAllWelcomers();
+const createDashboardSection = async (event: any): Promise<any[]> => {
   const stats = await prisma.slackStats.findFirst({ where: { id: 1 } });
   const totalWelcomed = stats?.totalWelcomed || 0;
   const pendingWelcomes = stats?.pendingWelcomes || 0;
 
-  const globalStats = [
+  return [
+    {
+      type: "header",
+      text: {
+        type: "plain_text",
+        text: "🌸 Professor Bloom's Dashboard 🌸",
+        emoji: true,
+      },
+    },
+    {
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: `*Welcome, <@${event.user}>!* :wave: Here's your garden overview:`,
+      },
+    },
     { type: "divider" },
     {
       type: "header",
@@ -109,7 +43,73 @@ const createAdminSection = async (): Promise<any[]> => {
         { type: "mrkdwn", text: `*Pending Welcomes:*\n${pendingWelcomes}` },
       ],
     },
+    { type: "divider" },
+    {
+      type: "section",
+      fields: [
+        { type: "mrkdwn", text: `*🌱 Pending Welcomes*\n*${pendingWelcomes}* new members` },
+        { type: "mrkdwn", text: "*🌼 Upcoming Follow-ups*\n*{wip}* check-ins" },
+        { type: "mrkdwn", text: "*🌻 Completed Follow-ups*\n*{wip}* this week" },
+      ],
+    },
+    {
+      type: "actions",
+      elements: [
+        {
+          type: "button",
+          text: {
+            type: "plain_text",
+            text: "View Pending Welcomes",
+            emoji: true,
+          },
+          style: "primary",
+          action_id: "view_pending_welcomes",
+        },
+        {
+          type: "button",
+          text: { type: "plain_text", text: "Upcoming Follow-ups", emoji: true },
+          action_id: "view_upcoming_followups",
+        },
+      ],
+    },
+    { type: "divider" },
+    {
+      type: "section",
+      text: { type: "mrkdwn", text: "*Quick Actions*" },
+    },
+    {
+      type: "actions",
+      elements: [
+        {
+          type: "button",
+          text: {
+            type: "plain_text",
+            text: "Edit Welcome Template",
+            emoji: true,
+          },
+          action_id: "edit_welcome_template",
+        },
+        {
+          type: "button",
+          text: { type: "plain_text", text: "View Statistics", emoji: true },
+          action_id: "view_statistics",
+        },
+      ],
+    },
+    {
+      type: "context",
+      elements: [
+        {
+          type: "mrkdwn",
+          text: ":seedling: Remember to take breaks and stay hydrated!",
+        },
+      ],
+    }
   ];
+};
+
+const createAdminSection = async (): Promise<any[]> => {
+  const allWelcomers = await getAllWelcomers();
 
   const welcomerStatsBlocks = [
     { type: "divider" },
@@ -169,7 +169,6 @@ const createAdminSection = async (): Promise<any[]> => {
   );
 
   return [
-    ...globalStats,
     ...welcomerStatsBlocks,
     ...welcomerStats,
     { type: "divider" },
@@ -193,7 +192,7 @@ export const createHomeView = async (
 ): Promise<View> => ({
   type: "home",
   blocks: [
-    ...createDashboardSection(event),
+    ...(await createDashboardSection(event)),
     ...(isAdmin ? await createAdminSection() : []),
   ],
 });
