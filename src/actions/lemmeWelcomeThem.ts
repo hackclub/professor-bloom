@@ -21,7 +21,7 @@ const getWelcomeTranscript = async (userID: string): Promise<string> => {
     select: { transcript: true },
   });
 
-  return user?.transcript || "";
+  return user?.transcript ?? "";
 };
 
 const isUserInList = (userID: string, list: string[]): boolean =>
