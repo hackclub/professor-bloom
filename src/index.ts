@@ -1,7 +1,6 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import { createConnectTransport } from "@connectrpc/connect-node";
 import { PrismaClient } from "@prisma/client";
 import { PrismaInstallationStore } from "@cskartikey/bolt-prisma";
 import { App, ExpressReceiver } from "@slack/bolt";
@@ -11,8 +10,6 @@ import express from "express";
 
 import { health } from "./endpoints/health";
 import { index } from "./endpoints/index";
-import { messageEvent } from "./events/message";
-import { appMention } from "./events/appMention";
 import { handleHomeTab } from "./events/home";
 import { teamJoin } from "./events/teamJoin";
 import { handleLemmeWelcomeThem } from "./actions/lemmeWelcomeThem";
@@ -99,8 +96,6 @@ app.action("welcomer_actions", handleWelcomerActions);
 app.view("add_welcomer_modal", handleAddWelcomerSubmission);
 app.view("edit_prompt", handleEditPromptSubmission);
 
-// app.event("message", messageEvent);
-// app.event("app_mention", appMention);
 app.event("team_join", teamJoin);
 app.event("app_home_opened", handleHomeTab);
 app.view("lemmewelcomethem_form", submissionWelcome);
@@ -108,13 +103,13 @@ app.view("lemmewelcomethem_form", submissionWelcome);
 const env = process.env.NODE_ENV!.toLowerCase();
 
 (async (): Promise<void> => {
-  await app.start(process.env.PORT || 3000);
+  await app.start(process.env.PORT ?? 3000);
   console.log(colors.green(`⚡️ Bolt app is running in env ${env}!`));
 
   try {
     await app.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
-      channel: process.env.SLACK_CHANNEL_DEV_SPAM || "None",
+      channel: process.env.SLACK_CHANNEL_DEV_SPAM ?? "None",
       text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
     });
   } catch (error) {
