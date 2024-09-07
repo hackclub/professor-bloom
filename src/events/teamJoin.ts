@@ -1,4 +1,8 @@
 import { Middleware, SlackEventMiddlewareArgs } from "@slack/bolt";
+import Airtable from 'airtable';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 type TeamJoinEvent = Middleware<SlackEventMiddlewareArgs<"team_join">>;
 
@@ -31,14 +35,36 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
     return;
   }
 
+  const userInfo = await client.users.info({ user: event.user.id });
+  console.log("User Info", userInfo);
+  const userEmail = userInfo.user?.profile?.email;
+  console.log("User Email", userEmail);
+
+  const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID ?? '');
+
+  let joinReason = "Unknown";
+  if (userEmail) {
+    const records = await base('Join Requests').select({
+      filterByFormula: `{Email Address} = '${userEmail}'`,
+      sort: [{ field: 'Created At', direction: 'desc' }],
+      maxRecords: 1,
+      fields: ['Reason']
+    }).firstPage();
+    console.log("Records", records);
+    if (records.length > 0) {
+      joinReason = records[0].get('Reason') as string || "Unknown";
+    }
+  }
+  console.log("Join Reason", joinReason);
   const continent = getContinentFromTimezone(event.user.tz);
   const data = {
     userId: event.user.id,
     continent,
-    joinReason: "Unknown",
+    joinReason,
   };
+
   await client.chat.postMessage({
-    channel: process.env.SLACK_CHANNEL_WELCOMERS || "None",
+    channel: "C06SU9YMC6R",
     blocks: [
       {
         type: "header",
@@ -75,7 +101,7 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: "*:speech_balloon: Join Reason:* To be updated",
+          text: `*:speech_balloon: Join Reason:* ${joinReason}`,
         },
       },
       {
