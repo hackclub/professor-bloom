@@ -22,12 +22,28 @@ export const submissionWelcome: ViewSubmissionEvent = async ({
   const blockKey = Object.keys(view.state.values)[0];
   const text = view.state.values[blockKey].email.value;
   
-  await client.chat.postMessage({
-    token: userToken,
-    channel: toSendUserID,
-    text: text?.toString(),
-  });
+  try {
+    await client.chat.postMessage({
+      token: userToken,
+      channel: toSendUserID,
+      text: text?.toString(),
+    });
 
+    await updateOriginalMessage(client, body.user.id, originalTs);
+    await updateWelcomeEvent(body.user.id, toSendUserID);
+    await updateStats();
+
+  } catch (error) {
+    console.error("Error in submissionWelcome:", error);
+    await client.chat.postEphemeral({
+      user: body.user.id,
+      channel: body.user.id,
+      text: "There was an error welcoming this person. Please try again.",
+    });
+  }
+};
+
+async function updateOriginalMessage(client, userId: string, originalTs: string) {
   const originalMessage = await client.conversations.history({
     channel: process.env.SLACK_CHANNEL_WELCOMERS ?? "",
     latest: originalTs,
@@ -42,7 +58,7 @@ export const submissionWelcome: ViewSubmissionEvent = async ({
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: `Being welcomed by <@${body.user.id}> :sunflower:`
+            text: `Being welcomed by <@${userId}> :sunflower:`
           }
         } as SectionBlock;
       }
@@ -57,9 +73,11 @@ export const submissionWelcome: ViewSubmissionEvent = async ({
       });
     }
   }
+}
 
+async function updateWelcomeEvent(welcomerId: string, newUserId: string) {
   const welcomeEvent = await prisma.welcomeEvent.findFirst({
-    where: { newUserId: toSendUserID, status: "pending" },
+    where: { newUserId: newUserId, status: "pending" },
     orderBy: { joinedAt: 'desc' },
   });
 
@@ -67,25 +85,32 @@ export const submissionWelcome: ViewSubmissionEvent = async ({
     const now = new Date();
     const timeToWelcome = now.getTime() - welcomeEvent.joinedAt.getTime();
 
-    await prisma.welcomeEvent.update({
-      where: { id: welcomeEvent.id },
-      data: {
-        welcomerId: body.user.id,
-        status: "completed",
-        completedAt: now,
-        timeToWelcome: timeToWelcome,
-      },
-    });
-
-    await prisma.user.update({
-      where: { slack: body.user.id },
-      data: {
-        welcomesGiven: { increment: 1 },
-        totalWelcomeTime: { increment: timeToWelcome },
-      },
-    });
+    await prisma.$transaction([
+      prisma.welcomeEvent.update({
+        where: { id: welcomeEvent.id },
+        data: {
+          welcomerId: welcomerId,
+          status: "completed",
+          completedAt: now,
+          timeToWelcome: timeToWelcome,
+        },
+      }),
+      prisma.user.update({
+        where: { slack: welcomerId },
+        data: {
+          welcomesGiven: { increment: 1 },
+          totalWelcomeTime: { increment: timeToWelcome },
+        },
+      }),
+      prisma.welcomeEvent.updateMany({
+        where: { newUserId: newUserId, status: "pending" },
+        data: { welcomerId: welcomerId, status: "completed", completedAt: now },
+      }),
+    ]);
   }
+}
 
+async function updateStats() {
   await prisma.slackStats.update({
     where: { id: 1 },
     data: {
@@ -93,14 +118,4 @@ export const submissionWelcome: ViewSubmissionEvent = async ({
       totalWelcomed: { increment: 1 },
     },
   });
-
-  await prisma.user.update({
-    where: { slack: body.user.id },
-    data: { welcomesGiven: { increment: 1 } },
-  });
-
-  await prisma.welcomeEvent.updateMany({
-    where: { newUserId: toSendUserID, status: "pending" },
-    data: { welcomerId: body.user.id, status: "completed", completedAt: new Date() },
-  });
-};
+}
