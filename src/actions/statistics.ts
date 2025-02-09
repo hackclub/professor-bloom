@@ -96,7 +96,7 @@ const openStatisticsModal = async (
           elements: [
             {
               type: "mrkdwn",
-              text: ":calendar: This month (October)",
+              text: ":calendar: This month",
             },
           ],
         },
@@ -148,7 +148,7 @@ const openStatisticsModal = async (
           elements: [
             {
               type: "mrkdwn",
-              text: ":clock4: Week to date (Monday -> Wednesday)",
+              text: ":clock4: Week to date (Monday -> Today)",
             },
           ],
         },
