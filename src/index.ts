@@ -22,6 +22,7 @@ import {
   handleWelcomerActions,
 } from "./actions/welcomerManagment";
 import { submissionWelcome } from "./views/submissionWelcome";
+import { handleStatistics } from "./actions/statistics";
 
 const createLogger = (): ConsoleLogger => {
   const logger = new ConsoleLogger();
@@ -94,6 +95,7 @@ app.action("lemmewelcomethem", handleLemmeWelcomeThem);
 app.action("edit_welcome_template", handleEditTemplate);
 app.action("add_welcomer", handleAddWelcomer);
 app.action("welcomer_actions", handleWelcomerActions);
+app.action("view_statistics", handleStatistics);
 app.view("add_welcomer_modal", handleAddWelcomerSubmission);
 app.view("edit_prompt", handleEditPromptSubmission);
 
