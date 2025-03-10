@@ -25,7 +25,7 @@ const getContinentFromTimezone = (timezone: string): string => {
     case "Antarctica":
       return "Antarctica";
     case "America":
-      return `America (figure out which one from the city:P) ${city}`;
+      return `America: ${city}`;
     case "Pacific":
       return "Oceania";
     default:
