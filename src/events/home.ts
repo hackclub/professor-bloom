@@ -37,41 +37,19 @@ const createDashboardSection = async (event: any): Promise<any[]> => {
       text: { type: "plain_text", text: "🌍 Global Stats", emoji: true },
     },
     {
-      type: "section",
-      fields: [
-        { type: "mrkdwn", text: `*Total Welcomed:*\n${totalWelcomed}` },
-        { type: "mrkdwn", text: `*Pending Welcomes:*\n${pendingWelcomes}` },
-      ],
-    },
-    { type: "divider" },
-    {
-      type: "section",
-      fields: [
-        { type: "mrkdwn", text: `*🌱 Pending Welcomes*\n*${pendingWelcomes}* new members` },
-        // { type: "mrkdwn", text: "*🌼 Upcoming Follow-ups*\n*{wip}* check-ins" },
-        // { type: "mrkdwn", text: "*🌻 Completed Follow-ups*\n*{wip}* this week" },
-      ],
-    },
-    {
-      type: "actions",
-      elements: [
-        {
-          type: "button",
-          text: {
-            type: "plain_text",
-            text: "View Pending Welcomes",
-            emoji: true,
-          },
-          style: "primary",
-          action_id: "view_pending_welcomes",
-        },
-        // {
-        //   type: "button",
-        //   text: { type: "plain_text", text: "Upcoming Follow-ups", emoji: true },
-        //   action_id: "view_upcoming_followups",
-        // },
-      ],
-    },
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `*👋 Total Welcomed:* ${totalWelcomed}`
+        }
+      },
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `*🌱 Pending Welcomes:* ${pendingWelcomes}`
+        }
+      },
     { type: "divider" },
     {
       type: "section",
@@ -93,6 +71,11 @@ const createDashboardSection = async (event: any): Promise<any[]> => {
           type: "button",
           text: { type: "plain_text", text: "View Statistics", emoji: true },
           action_id: "view_statistics",
+        },
+        {
+          type: "button",
+          text: { type: "plain_text", text: "Welcome oldest pending user", emoji: true },
+          action_id: "welcome_oldest_pending",
         },
       ],
     },

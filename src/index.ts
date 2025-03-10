@@ -7,8 +7,8 @@ import { App, ExpressReceiver } from "@slack/bolt";
 import { ConsoleLogger, LogLevel } from "@slack/logger";
 import colors from "colors";
 import express from "express";
-import cron from 'node-cron';
-import { sendDailyStats } from './scheduledTasks/dailyStats';
+import cron from "node-cron";
+import { sendDailyStats } from "./scheduledTasks/dailyStats";
 import { health } from "./endpoints/health";
 import { index } from "./endpoints/index";
 import { handleHomeTab } from "./events/home";
@@ -115,7 +115,6 @@ const env = process.env.NODE_ENV!.toLowerCase();
       channel: process.env.SLACK_CHANNEL_DEV_SPAM ?? "None",
       text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
     });
-    console.log("sent msg")
   } catch (error) {
     logger.error("Failed to send startup message:", error);
   }
@@ -123,6 +122,6 @@ const env = process.env.NODE_ENV!.toLowerCase();
 
 export { installationStore, app };
 
-cron.schedule('0 0 * * *', () => {
+cron.schedule("0 0 * * *", () => {
   sendDailyStats().catch(console.error);
 });

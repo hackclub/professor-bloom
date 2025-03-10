@@ -159,7 +159,7 @@ export const handleLemmeWelcomeThem = async ({ ack, body, client, action }) => {
     return await client.chat.postEphemeral({
       user: userID,
       channel: body.channel.id,
-      text: "Whoa there! How'd you get here? If you think you're in the right place, please reach out to <@U05F4B48GBF> for assistance!",
+      text: "Whoa there! How'd you get here? If you think you're in the right place, please reach out to <@U054VC2KM9P> for assistance!",
     });
   }
 
