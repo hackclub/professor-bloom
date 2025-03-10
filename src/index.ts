@@ -115,6 +115,7 @@ const env = process.env.NODE_ENV!.toLowerCase();
       channel: process.env.SLACK_CHANNEL_DEV_SPAM ?? "None",
       text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
     });
+    console.log("sent msg")
   } catch (error) {
     logger.error("Failed to send startup message:", error);
   }

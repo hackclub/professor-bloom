@@ -48,8 +48,8 @@ const createDashboardSection = async (event: any): Promise<any[]> => {
       type: "section",
       fields: [
         { type: "mrkdwn", text: `*🌱 Pending Welcomes*\n*${pendingWelcomes}* new members` },
-        { type: "mrkdwn", text: "*🌼 Upcoming Follow-ups*\n*{wip}* check-ins" },
-        { type: "mrkdwn", text: "*🌻 Completed Follow-ups*\n*{wip}* this week" },
+        // { type: "mrkdwn", text: "*🌼 Upcoming Follow-ups*\n*{wip}* check-ins" },
+        // { type: "mrkdwn", text: "*🌻 Completed Follow-ups*\n*{wip}* this week" },
       ],
     },
     {
@@ -65,11 +65,11 @@ const createDashboardSection = async (event: any): Promise<any[]> => {
           style: "primary",
           action_id: "view_pending_welcomes",
         },
-        {
-          type: "button",
-          text: { type: "plain_text", text: "Upcoming Follow-ups", emoji: true },
-          action_id: "view_upcoming_followups",
-        },
+        // {
+        //   type: "button",
+        //   text: { type: "plain_text", text: "Upcoming Follow-ups", emoji: true },
+        //   action_id: "view_upcoming_followups",
+        // },
       ],
     },
     { type: "divider" },
