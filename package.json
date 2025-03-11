@@ -51,5 +51,12 @@
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=8.14.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "prisma"
+    ]
   }
 }
