@@ -23,6 +23,8 @@ import {
 } from "./actions/welcomerManagment";
 import { submissionWelcome } from "./views/submissionWelcome";
 import { handleStatistics } from "./actions/statistics";
+import { handleReportAdult } from "./actions/reportAdult";
+import { handleReportAdultSubmission } from "./views/reportAdult";
 
 const createLogger = (): ConsoleLogger => {
   const logger = new ConsoleLogger();
@@ -92,13 +94,14 @@ const app = new App({
 });
 
 app.action("lemmewelcomethem", handleLemmeWelcomeThem);
+app.action("report-adult", handleReportAdult);
 app.action("edit_welcome_template", handleEditTemplate);
 app.action("add_welcomer", handleAddWelcomer);
 app.action("welcomer_actions", handleWelcomerActions);
 app.action("view_statistics", handleStatistics);
 app.view("add_welcomer_modal", handleAddWelcomerSubmission);
 app.view("edit_prompt", handleEditPromptSubmission);
-
+app.view("report_adult", handleReportAdultSubmission);
 app.event("team_join", teamJoin);
 app.event("app_home_opened", handleHomeTab);
 app.view("lemmewelcomethem_form", submissionWelcome);

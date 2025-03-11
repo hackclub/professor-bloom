@@ -136,6 +136,17 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
             action_id: "lemmewelcomethem",
             style: "primary",
           },
+          {
+            type: "button",
+            text: {
+              type: "plain_text",
+              text: ":no-adults: Adult!!",
+              emoji: true,
+            },
+            value: data.userId,
+            action_id: "report-adult",
+            style: "danger",
+          }
         ],
       },
       {

@@ -3,14 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model SlackToken {
-  @@map("slack_app_installation")
-
   id                              Int       @id @default(autoincrement())
   clientId                        String?   @map("client_id")
   appId                           String?   @map("app_id")
@@ -37,33 +35,36 @@ model SlackToken {
   isEnterpriseInstall             Boolean   @default(false) @map("is_enterprise_install")
   tokenType                       String    @default("bot") @map("token_type")
   installedAt                     DateTime  @default(now()) @map("installed_at")
+
+  @@map("slack_app_installation")
 }
 
 model User {
-  id              String   @id
-  slack           String   @unique
-  admin           Boolean
-  transcript      String
-  welcomesGiven   Int      @default(0)
-  totalWelcomeTime Int     @default(0)
-  welcomedUsers   WelcomeEvent[]
+  id               String         @id
+  slack            String         @unique
+  admin            Boolean
+  transcript       String
+  welcomesGiven    Int            @default(0)
+  totalWelcomeTime Int            @default(0)
+  welcomedUsers    WelcomeEvent[]
 }
 
 model SlackStats {
-  id                  Int      @id @default(autoincrement())
-  totalJoins          Int      @default(0)
-  totalWelcomed       Int      @default(0)
-  pendingWelcomes     Int      @default(0)
-  lastUpdated         DateTime @default(now())
+  id              Int      @id @default(autoincrement())
+  totalJoins      Int      @default(0)
+  totalWelcomed   Int      @default(0)
+  pendingWelcomes Int      @default(0)
+  lastUpdated     DateTime @default(now())
 }
 
 model WelcomeEvent {
-  id             Int      @id @default(autoincrement())
-  newUserId      String
-  welcomer       User?    @relation(fields: [welcomerId], references: [slack])
-  welcomerId     String?
-  status         String   @default("pending")
-  joinedAt       DateTime @default(now())
-  completedAt    DateTime?
-  timeToWelcome  Int?
+  id            Int       @id @default(autoincrement())
+  newUserId     String    @unique
+  welcomer      User?     @relation(fields: [welcomerId], references: [slack])
+  welcomerId    String?
+  status        String    @default("pending")
+  joinedAt      DateTime  @default(now())
+  completedAt   DateTime?
+  timeToWelcome Int?
+  adult         Boolean   @default(false)
 }
