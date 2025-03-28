@@ -7,7 +7,13 @@ const prisma = new PrismaClient();
 
 const getAllWelcomers = async () =>
   await prisma.user.findMany({
-    select: { slack: true, id: true, admin: true, welcomesGiven: true, totalWelcomeTime: true },
+    select: {
+      slack: true,
+      id: true,
+      admin: true,
+      welcomesGiven: true,
+      totalWelcomeTime: true,
+    },
   });
 
 const createDashboardSection = async (event: any): Promise<any[]> => {
@@ -37,19 +43,19 @@ const createDashboardSection = async (event: any): Promise<any[]> => {
       text: { type: "plain_text", text: "🌍 Global Stats", emoji: true },
     },
     {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `*👋 Total Welcomed:* ${totalWelcomed}`
-        }
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: `*👋 Total Welcomed:* ${totalWelcomed}`,
       },
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `*🌱 Pending Welcomes:* ${pendingWelcomes}`
-        }
+    },
+    {
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: `*🌱 Pending Welcomes:* ${pendingWelcomes}`,
       },
+    },
     { type: "divider" },
     {
       type: "section",
@@ -74,7 +80,11 @@ const createDashboardSection = async (event: any): Promise<any[]> => {
         },
         {
           type: "button",
-          text: { type: "plain_text", text: "Welcome oldest pending user", emoji: true },
+          text: {
+            type: "plain_text",
+            text: "Welcome oldest pending user",
+            emoji: true,
+          },
           action_id: "welcome_oldest_pending",
         },
       ],
@@ -87,7 +97,7 @@ const createDashboardSection = async (event: any): Promise<any[]> => {
           text: ":seedling: Remember to take breaks and stay hydrated!",
         },
       ],
-    }
+    },
   ];
 };
 
@@ -125,11 +135,19 @@ const createAdminSection = async (): Promise<any[]> => {
           type: "overflow",
           options: [
             {
-              text: { type: "plain_text", text: "View/Edit Transcript", emoji: true },
+              text: {
+                type: "plain_text",
+                text: "View/Edit Transcript",
+                emoji: true,
+              },
               value: `view_edit_transcript::${welcomer.slack}`,
             },
             {
-              text: { type: "plain_text", text: "Remove Welcomer", emoji: true },
+              text: {
+                type: "plain_text",
+                text: "Remove Welcomer",
+                emoji: true,
+              },
               value: `remove_welcomer::${welcomer.slack}`,
             },
             {
@@ -141,14 +159,18 @@ const createAdminSection = async (): Promise<any[]> => {
               value: `toggle_admin::${welcomer.slack}`,
             },
             {
-              text: { type: "plain_text", text: "View Welcomed Users", emoji: true },
+              text: {
+                type: "plain_text",
+                text: "View Welcomed Users",
+                emoji: true,
+              },
               value: `view_welcomed_users::${welcomer.slack}`,
             },
           ],
           action_id: "welcomer_actions",
         },
       };
-    })
+    }),
   );
 
   return [

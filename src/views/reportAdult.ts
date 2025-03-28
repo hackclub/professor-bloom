@@ -11,12 +11,13 @@ export const handleReportAdultSubmission = async ({
   const reasonBlock = view.state.values.adult_reason;
   const communicatedBlock = view.state.values.communicated;
   const reason = reasonBlock["report_adult-action"].value;
-  const communicated = communicatedBlock["communicated-action"].selected_option.value;
+  const communicated =
+    communicatedBlock["communicated-action"].selected_option.value;
 
   await client.chat.postMessage({
     channel: process.env.SLACK_FD_LOGS,
-    text: `:rotating_light: <@${userId}> has reported <@${reportedUserId}> as an adult. :rotating_light:\n\n*Reason:*\n\`\`\`${reason}\`\`\`\n\n*Confirmed in DMs:* ${communicated == 'yes' ? ':white_check_mark:' : ':red-x:' }\n\n_Please react to this message with :white_check_mark: once dealt with._`,
-  })
+    text: `:rotating_light: <@${userId}> has reported <@${reportedUserId}> as an adult. :rotating_light:\n\n*Reason:*\n\`\`\`${reason}\`\`\`\n\n*Confirmed in DMs:* ${communicated == "yes" ? ":white_check_mark:" : ":red-x:"}\n\n_Please react to this message with :white_check_mark: once dealt with._`,
+  });
   await client.chat.update({
     channel: process.env.SLACK_CHANNEL_WELCOMERS,
     ts: messageTs,
@@ -53,5 +54,5 @@ export const handleReportAdultSubmission = async ({
         ],
       },
     ],
-  })
+  });
 };

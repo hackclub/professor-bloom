@@ -21,9 +21,9 @@ Credits for the logo: [!Eleeza Amin](https://github.com/E-Lee-Za)
 ```yaml
 display_information:
   name: Professor Bloom - Dev [your_name]
-  description: 
+  description:
   background_color: "#FFFFFF"
-  long_description: 
+  long_description:
 features:
   app_home:
     home_tab_enabled: true
@@ -76,22 +76,26 @@ settings:
 ## Setting up the Project
 
 1. Clone the repository:
+
    ```
    git clone https://github.com/your-repo/professor-bloom.git
    cd professor-bloom
    ```
 
 2. Install dependencies:
+
    ```
    pnpm install
    ```
 
 3. Copy the `sample.env` file to `.env`:
+
    ```
    cp sample.env .env
    ```
 
 4. Edit the `.env` file and fill in the values:
+
    ```
    PORT=3000
    NODE_ENV="development"
@@ -112,6 +116,7 @@ settings:
    DATABASE_URL="postgres://<username>:<password>@localhost:5432/<database>?schema=bloom"
    SHADOW_DATABASE_URL="postgres://<username>:<password>@localhost:5432/<database>?schema=bloom_shadow"
    ```
+
    Replace the values with your actual parameters.
 
 5. Set up the database:
@@ -122,12 +127,15 @@ settings:
 ## Running the Application
 
 1. Start ngrok:
+
    ```
    ngrok http 3000
    ```
+
    Note the HTTPS URL provided by ngrok.
 
 2. Update your Slack app's request URLs:
+
    - Go to your Slack app's settings.
    - In "Event Subscriptions" and "Interactivity & Shortcuts", update the request URL to your ngrok HTTPS URL followed by `/slack/events`.
    - In "OAuth & Permissions", update `Redirect URLs` to your ngrok HTTPS URL followed by `/slack/oauth_redirect`.

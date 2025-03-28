@@ -81,13 +81,12 @@ const openReportAdultModal = async (
             type: "plain_text",
             text: "Have you confirmed in DMs with them?",
           },
-        }
+        },
       ],
       private_metadata: `${userId}:${messageTs}`,
     },
   });
 };
-
 
 export const handleReportAdult = async ({ ack, body, client, action }) => {
   try {
@@ -96,10 +95,10 @@ export const handleReportAdult = async ({ ack, body, client, action }) => {
     console.error("Error acknowledging request:", error);
     return;
   }
-  
-  const userSlackId = body.actions[0].value as string || "";
-  console.log(`User: ${userSlackId}`)
-  
+
+  const userSlackId = (body.actions[0].value as string) || "";
+  console.log(`User: ${userSlackId}`);
+
   const now = new Date();
 
   const welcomeEvent = await prisma.welcomeEvent.findFirst({
@@ -110,7 +109,7 @@ export const handleReportAdult = async ({ ack, body, client, action }) => {
     return;
   }
   const timeToWelcome = now.getTime() - welcomeEvent.joinedAt.getTime();
-  
+
   await prisma.welcomeEvent.update({
     where: { id: welcomeEvent.id },
     data: {

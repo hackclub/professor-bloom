@@ -27,13 +27,17 @@ const getWelcomeTranscript = async (userID: string): Promise<string> => {
 const isUserInList = (userID: string, list: string[]): boolean =>
   list.includes(userID);
 
-const replacePlaceholders = async (client, transcript: string, userId: string): Promise<string> => {
+const replacePlaceholders = async (
+  client,
+  transcript: string,
+  userId: string,
+): Promise<string> => {
   try {
     const userInfo = await client.users.info({ user: userId });
     const realName = userInfo.user.real_name || userInfo.user.name;
-    const [firstName, ...lastNameParts] = realName.split(' ');
-    const lastName = lastNameParts.join(' ');
-    
+    const [firstName, ...lastNameParts] = realName.split(" ");
+    const lastName = lastNameParts.join(" ");
+
     return transcript
       .replace(/<mention>/g, `<@${userId}>`)
       .replace(/<real_name>/g, realName)
@@ -55,8 +59,12 @@ const openWelcomeModal = async (
   originalTs: string,
 ) => {
   try {
-    const processedTranscript = await replacePlaceholders(client, transcript, extraData.userId);
-    
+    const processedTranscript = await replacePlaceholders(
+      client,
+      transcript,
+      extraData.userId,
+    );
+
     return await client.views.open({
       trigger_id,
       view: {

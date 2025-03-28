@@ -135,7 +135,7 @@ const handleViewWelcomedUsers = async ({ body, client, welcomerId }) => {
   try {
     const welcomedUsers = await prisma.welcomeEvent.findMany({
       where: { welcomerId: welcomerId, status: "completed" },
-      orderBy: { completedAt: 'desc' },
+      orderBy: { completedAt: "desc" },
       select: { newUserId: true, completedAt: true },
     });
 
@@ -152,9 +152,15 @@ const handleViewWelcomedUsers = async ({ body, client, welcomerId }) => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: welcomedUsers.length > 0
-            ? welcomedUsers.map(user => `• <@${user.newUserId}> - ${user.completedAt?.toLocaleDateString() ?? 'Date not available'}`).join('\n')
-            : "No users welcomed yet.",
+          text:
+            welcomedUsers.length > 0
+              ? welcomedUsers
+                  .map(
+                    (user) =>
+                      `• <@${user.newUserId}> - ${user.completedAt?.toLocaleDateString() ?? "Date not available"}`,
+                  )
+                  .join("\n")
+              : "No users welcomed yet.",
         },
       },
     ];

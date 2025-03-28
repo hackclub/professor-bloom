@@ -3,7 +3,7 @@ import {
   SlackViewMiddlewareArgs,
   SlackViewAction,
   KnownBlock,
-  SectionBlock
+  SectionBlock,
 } from "@slack/bolt";
 import { PrismaClient } from "@prisma/client";
 
@@ -18,10 +18,11 @@ export const submissionWelcome: ViewSubmissionEvent = async ({
   client,
 }) => {
   await ack();
-  const [userToken, toSendUserID, originalTs] = view.private_metadata.split(" ");
+  const [userToken, toSendUserID, originalTs] =
+    view.private_metadata.split(" ");
   const blockKey = Object.keys(view.state.values)[0];
   const text = view.state.values[blockKey].email.value;
-  
+
   try {
     await client.chat.postMessage({
       token: userToken,
@@ -32,7 +33,6 @@ export const submissionWelcome: ViewSubmissionEvent = async ({
     await updateOriginalMessage(client, body.user.id, originalTs);
     await updateWelcomeEvent(body.user.id, toSendUserID);
     await updateStats();
-
   } catch (error) {
     console.error("Error in submissionWelcome:", error);
     await client.chat.postEphemeral({
@@ -43,7 +43,11 @@ export const submissionWelcome: ViewSubmissionEvent = async ({
   }
 };
 
-async function updateOriginalMessage(client, userId: string, originalTs: string) {
+async function updateOriginalMessage(
+  client,
+  userId: string,
+  originalTs: string,
+) {
   const originalMessage = await client.conversations.history({
     channel: process.env.SLACK_CHANNEL_WELCOMERS ?? "",
     latest: originalTs,
@@ -52,34 +56,36 @@ async function updateOriginalMessage(client, userId: string, originalTs: string)
   });
 
   if (originalMessage.messages && originalMessage.messages.length > 0) {
-    const updatedBlocks = originalMessage.messages[0].blocks?.map((block: any): KnownBlock => {
-      if (block.type === 'actions') {
-        let welcomeUserId = '';
-        for (const element of block.elements) {
-          if (element.action_id === 'report-adult') {
-            welcomeUserId = element.value
+    const updatedBlocks = originalMessage.messages[0].blocks?.map(
+      (block: any): KnownBlock => {
+        if (block.type === "actions") {
+          let welcomeUserId = "";
+          for (const element of block.elements) {
+            if (element.action_id === "report-adult") {
+              welcomeUserId = element.value;
+            }
           }
-        }
-        return {
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
-            text: `Being welcomed by <@${userId}> :sunflower:`
-          },
-          accessory: {
-            type: 'button',
+          return {
+            type: "section",
             text: {
-              type: 'plain_text',
-              text: ':no-adults: Adult!!',
+              type: "mrkdwn",
+              text: `Being welcomed by <@${userId}> :sunflower:`,
             },
-            style: 'danger',
-            action_id: 'report-adult',
-            value: welcomeUserId,
-          }
-        } as SectionBlock;
-      }
-      return block as KnownBlock;
-    });
+            accessory: {
+              type: "button",
+              text: {
+                type: "plain_text",
+                text: ":no-adults: Adult!!",
+              },
+              style: "danger",
+              action_id: "report-adult",
+              value: welcomeUserId,
+            },
+          } as SectionBlock;
+        }
+        return block as KnownBlock;
+      },
+    );
 
     if (updatedBlocks) {
       await client.chat.update({
@@ -94,7 +100,7 @@ async function updateOriginalMessage(client, userId: string, originalTs: string)
 async function updateWelcomeEvent(welcomerId: string, newUserId: string) {
   const welcomeEvent = await prisma.welcomeEvent.findFirst({
     where: { newUserId: newUserId, status: "pending" },
-    orderBy: { joinedAt: 'desc' },
+    orderBy: { joinedAt: "desc" },
   });
 
   if (welcomeEvent) {

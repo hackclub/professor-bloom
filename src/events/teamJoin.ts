@@ -1,7 +1,7 @@
 import { Middleware, SlackEventMiddlewareArgs } from "@slack/bolt";
-import Airtable from 'airtable';
-import { PrismaClient } from '@prisma/client';
-import dotenv from 'dotenv';
+import Airtable from "airtable";
+import { PrismaClient } from "@prisma/client";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -50,7 +50,7 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
       pendingWelcomes: 1,
     },
   });
-  
+
   await prisma.welcomeEvent.create({
     data: {
       newUserId: event.user.id,
@@ -60,18 +60,22 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
   const userInfo = await client.users.info({ user: event.user.id });
   const userEmail = userInfo.user?.profile?.email;
 
-  const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID ?? '');
+  const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
+    process.env.AIRTABLE_BASE_ID ?? "",
+  );
 
   let joinReason = "Unknown";
   if (userEmail) {
-    const records = await base('Join Requests').select({
-      filterByFormula: `{Email Address} = '${userEmail}'`,
-      sort: [{ field: 'Created At', direction: 'desc' }],
-      maxRecords: 1,
-      fields: ['Reason']
-    }).firstPage();
+    const records = await base("Join Requests")
+      .select({
+        filterByFormula: `{Email Address} = '${userEmail}'`,
+        sort: [{ field: "Created At", direction: "desc" }],
+        maxRecords: 1,
+        fields: ["Reason"],
+      })
+      .firstPage();
     if (records.length > 0) {
-      joinReason = records[0].get('Reason') as string || "Unknown";
+      joinReason = (records[0].get("Reason") as string) || "Unknown";
     }
   }
   const continent = getContinentFromTimezone(event.user.tz);
@@ -146,7 +150,7 @@ export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
             value: data.userId,
             action_id: "report-adult",
             style: "danger",
-          }
+          },
         ],
       },
       {
