@@ -123,8 +123,8 @@ const env = process.env.NODE_ENV!.toLowerCase();
   }
 })();
 
-export { installationStore, app };
-
 cron.schedule("0 0 * * *", () => {
   sendDailyStats().catch(console.error);
 });
+
+export { installationStore, app };

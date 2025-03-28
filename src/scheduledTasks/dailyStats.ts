@@ -64,6 +64,7 @@ export const sendDailyStats = async () => {
   await app.client.chat.postMessage({
     channel: process.env.SLACK_WELCOMER_COMMS_CHANNEL || "",
     blocks: blocks,
-    text: "Daily Welcome Stats", // Fallback text
+    text: "Daily Welcome Stats", // Fallback text,
+    token: process.env.SLACK_BOT_TOKEN
   });
 };
