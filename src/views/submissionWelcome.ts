@@ -54,11 +54,27 @@ async function updateOriginalMessage(client, userId: string, originalTs: string)
   if (originalMessage.messages && originalMessage.messages.length > 0) {
     const updatedBlocks = originalMessage.messages[0].blocks?.map((block: any): KnownBlock => {
       if (block.type === 'actions') {
+        let welcomeUserId = '';
+        for (const element of block.elements) {
+          if (element.action_id === 'report-adult') {
+            welcomeUserId = element.value
+          }
+        }
         return {
           type: 'section',
           text: {
             type: 'mrkdwn',
             text: `Being welcomed by <@${userId}> :sunflower:`
+          },
+          accessory: {
+            type: 'button',
+            text: {
+              type: 'plain_text',
+              text: ':no-adults: Adult!!',
+            },
+            style: 'danger',
+            action_id: 'report-adult',
+            value: welcomeUserId,
           }
         } as SectionBlock;
       }
