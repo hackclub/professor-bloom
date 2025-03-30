@@ -13,5 +13,6 @@ COPY . .
 EXPOSE 3000
 
 RUN pnpm prisma db push
+RUN pnpm run build
 
 CMD ["pnpm", "run", "start"]
