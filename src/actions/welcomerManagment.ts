@@ -40,7 +40,7 @@ const handleViewEditTranscript = async ({ body, client, welcomerId }) => {
         private_metadata: welcomerId,
         title: {
           type: "plain_text",
-          text: `Edit ${welcomer?.id}'s Transcript`,
+          text: `Edit Transcript`,
         },
         submit: {
           type: "plain_text",
