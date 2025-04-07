@@ -121,7 +121,6 @@ async function updateWelcomeEvent(welcomerId: string, newUserId: string) {
         where: { slack: welcomerId },
         data: {
           welcomesGiven: { increment: 1 },
-          totalWelcomeTime: { increment: timeToWelcome },
         },
       }),
       prisma.welcomeEvent.updateMany({
