@@ -112,15 +112,22 @@ const env = process.env.NODE_ENV!.toLowerCase();
 (async (): Promise<void> => {
   await app.start(process.env.PORT ?? 3000);
   console.log(colors.green(`⚡️ Bolt app is running in env ${env}!`));
+  
+  let commitHash = process.env.GIT_COMMIT_SHORT_SHA;
+  let fullcommitHash = process.env.GIT_COMMIT_SHA;
 
   try {
-    const commitHash = execSync('git log --pretty=format:"%h" -n1')
-       .toString()
-       .trim();
+    if (!commitHash) {
+      commitHash = execSync('git log --pretty=format:"%h" -n1')
+        .toString()
+        .trim();
+    }
     
-    const fullcommitHash = execSync('git log --pretty=format:"%H" -n1')
-       .toString()
-       .trim();
+    if (!fullcommitHash) {
+      fullcommitHash = execSync('git log --pretty=format:"%H" -n1')
+        .toString()
+        .trim();
+    }
     
     await app.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
