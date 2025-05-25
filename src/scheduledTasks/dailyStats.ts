@@ -3,6 +3,12 @@ import { app } from "../index";
 
 const prisma = new PrismaClient();
 
+export interface WelcomerStats {
+  welcomerId: string;
+  welcomerName: string;
+  count: number;
+}
+
 export const sendDailyStats = async () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -19,15 +25,49 @@ export const sendDailyStats = async () => {
       },
     },
   });
-  const dailyWelcomed = await prisma.welcomeEvent.count({
+  const dailyWelcomers = await prisma.welcomeEvent.groupBy({
+    by: ["welcomerId"],
     where: {
       completedAt: {
         gte: yesterday,
         lt: today,
       },
       status: "completed",
+      welcomerId: {
+        not: null,
+      },
+    },
+    _count: {
+      welcomerId: true,
     },
   });
+  
+  const welcomerStats: WelcomerStats[] = [];
+  for (const welcomer of dailyWelcomers) {
+    if (welcomer.welcomerId) {
+      const user = await prisma.user.findUnique({
+        where: { slack: welcomer.welcomerId },
+      });
+      if (user) {
+        welcomerStats.push({
+          welcomerId: welcomer.welcomerId,
+          welcomerName: `<@${welcomer.welcomerId}>`,
+          count: welcomer._count.welcomerId,
+        });
+      }
+    }
+  }
+  
+  const dailyWelcomed = welcomerStats.reduce((sum, welcomer) => sum + welcomer.count, 0);
+  
+  welcomerStats.sort((a, b) => b.count - a.count);
+
+  const topWelcomers = welcomerStats.slice(0, 3);
+  
+  const topWelcomersText = topWelcomers.map((welcomer, index) => {
+    const medals = ["🥇", "🥈", "🥉"];
+    return `${medals[index] || ""} ${welcomer.welcomerName}: ${welcomer.count} welcomes`;
+  }).join("\n");
 
   const blocks = [
     {
@@ -59,12 +99,43 @@ export const sendDailyStats = async () => {
         },
       ],
     },
+    {
+      "type": "divider",
+    },
+    {
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: "*Top Welcomers Today:*",
+      },
+    },
+    {
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: topWelcomersText || "No welcomes today :(",
+      },
+    }
   ];
 
-  await app.client.chat.postMessage({
+  const messageResponse = await app.client.chat.postMessage({
     channel: process.env.SLACK_WELCOMER_COMMS_CHANNEL || "",
     blocks: blocks,
-    text: "Daily Welcome Stats", // Fallback text,
+    text: "Daily Welcome Stats",
     token: process.env.SLACK_BOT_TOKEN
   });
+  
+  const leaderboardText = welcomerStats.map((welcomer, index) => {
+    const medals = ["🥇 ", "🥈 ", "🥉 "];
+    return `${index + 1}. ${welcomer.welcomerName}: ${welcomer.count} welcomes`;
+  })
+  
+  if (messageResponse.ts) {
+    await app.client.chat.postMessage({
+      channel: process.env.SLACK_WELCOMER_COMMS_CHANNEL || "",
+      text: `*Full Leaderboard:*\n${leaderboardText.join("\n")}`,
+      thread_ts: messageResponse.ts,
+      token: process.env.SLACK_BOT_TOKEN
+    })
+  }
 };
