@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
+import { execSync } from "child_process";
 import { PrismaClient } from "@prisma/client";
 import { PrismaInstallationStore } from "@cskartikey/bolt-prisma";
 import { App, ExpressReceiver } from "@slack/bolt";
@@ -113,10 +114,18 @@ const env = process.env.NODE_ENV!.toLowerCase();
   console.log(colors.green(`⚡️ Bolt app is running in env ${env}!`));
 
   try {
+    const commitHash = execSync('git log --pretty=format:"%h" -n1')
+       .toString()
+       .trim();
+    
+    const fullcommitHash = execSync('git log --pretty=format:"%H" -n1')
+       .toString()
+       .trim();
+    
     await app.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
       channel: process.env.SLACK_CHANNEL_DEV_SPAM ?? "None",
-      text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom:`,
+      text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom: (${env})\n\(<https://github.com/hackclub/professor-bloom/commit/${fullcommitHash}|${commitHash}>)`,
     });
   } catch (error) {
     logger.error("Failed to send startup message:", error);
