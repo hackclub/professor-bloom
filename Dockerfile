@@ -13,15 +13,13 @@ RUN pnpm install
 
 COPY . .
 
-# Set Git commit hash environment variables
-RUN GIT_COMMIT_SHORT_SHA=$(git log --pretty=format:%h -n1 2>/dev/null || echo "unknown_short") && \
-    GIT_COMMIT_SHA=$(git log --pretty=format:%H -n1 2>/dev/null || echo "unknown_full") && \
-    echo "GIT_COMMIT_SHORT_SHA=$GIT_COMMIT_SHORT_SHA" >> /etc/environment && \
-    echo "GIT_COMMIT_SHA=$GIT_COMMIT_SHA" >> /etc/environment
+# Accept Git commit hash as build arguments
+ARG GIT_COMMIT_SHA=unknown_full
+ARG GIT_COMMIT_SHORT_SHA=unknown_short
 
-# Load ENV variables into image
-ENV GIT_COMMIT_SHORT_SHA=unknown_short
-ENV GIT_COMMIT_SHA=unknown_full
+# Set them as environment variables
+ENV GIT_COMMIT_SHA=${GIT_COMMIT_SHA}
+ENV GIT_COMMIT_SHORT_SHA=${GIT_COMMIT_SHORT_SHA}
 
 EXPOSE 3000
 
