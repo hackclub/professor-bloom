@@ -99,6 +99,8 @@ export const handleNewWeclomeable = async (
 
   let joinReason = "Unknown";
   if (userEmail) {
+    try {
+
     const records = await base("Join Requests")
       .select({
         filterByFormula: `{Email Address} = '${userEmail}'`,
@@ -109,6 +111,9 @@ export const handleNewWeclomeable = async (
       .firstPage();
     if (records.length > 0) {
       joinReason = (records[0].get("Reason") as string) || "Unknown";
+    }
+    } catch (error) {
+      console.log("Ignoring error reading reason from airtable: ", error)
     }
   }
   const continent = getContinentFromTimezone(user.tz);
