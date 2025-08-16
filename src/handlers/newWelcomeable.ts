@@ -125,12 +125,13 @@ export const handleNewWeclomeable = async (
 
   await client.chat.postMessage({
     channel: process.env.SLACK_CHANNEL_WELCOMERS ?? "",
+    text: `New welcomeable ${user.name} ${source}-${user.id}`,
     blocks: [
       {
         type: "header",
         text: {
           type: "plain_text",
-          text: "Someone new joined the slack! :partyparrot:",
+          text: source == "teamJoin" ? "Someone new joined the slack! :partyparrot:": "Someone was upgraded to a full user! :partyparrot:",
           emoji: true,
         },
       },

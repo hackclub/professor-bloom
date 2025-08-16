@@ -6,11 +6,9 @@ import { handleNewWeclomeable } from "../handlers/newWelcomeable";
 
 dotenv.config();
 
-const DO_HANDLE_TEAM_JOIN = !!process.env.ENABLE_TEAM_JOIN_EVENT;
 type TeamJoinEvent = Middleware<SlackEventMiddlewareArgs<"team_join">>;
 
 export const teamJoin: TeamJoinEvent = async ({ event, client }) => {
-  if (!DO_HANDLE_TEAM_JOIN) return;
   try {
   await handleNewWeclomeable(event.user.id, client, "teamJoin");
   } catch (error) {

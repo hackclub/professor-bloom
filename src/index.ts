@@ -47,7 +47,7 @@ const createInstallationStore = (
 };
 
 export const slackClient = new WebClient(process.env.SLACK_BOT_TOKEN);
-
+const enableTeamJoinEvent = process.env.ENABLE_TEAM_JOIN_EVENT
 
 const createReceiver = (
   installationStore: PrismaInstallationStore,
@@ -109,13 +109,21 @@ app.action("view_statistics", handleStatistics);
 app.view("add_welcomer_modal", handleAddWelcomerSubmission);
 app.view("edit_prompt", handleEditPromptSubmission);
 app.view("report_adult", handleReportAdultSubmission);
+if (enableTeamJoinEvent){
 app.event("team_join", teamJoin);
+}
 app.event("app_home_opened", handleHomeTab);
 app.view("lemmewelcomethem_form", submissionWelcome);
 
 const env = process.env.NODE_ENV!.toLowerCase();
 
 (async (): Promise<void> => {
+  if (process.env.NODE_ENV !== "development" && process.env.UPGRADE_WEBHOOK_TOKENS === "first second"){
+    logger.warn("!!!! Using default (and vulnerable) webhook tokens in not DEV enviroment.")
+  }
+  if (!enableTeamJoinEvent) {
+    logger.warn("Ignoring team join events as defined in the process environment.")
+  }
   await app.start(process.env.PORT ?? 3000);
   console.log(colors.green(`⚡️ Bolt app is running in env ${env}!`));
 
