@@ -32,6 +32,9 @@ importers:
       '@slack/oauth':
         specifier: ^3.0.3
         version: 3.0.3
+      '@slack/web-api':
+        specifier: ^6.13.0
+        version: 6.13.0
       '@types/express':
         specifier: ^4.17.22
         version: 4.17.22
