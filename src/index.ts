@@ -26,6 +26,7 @@ import { submissionWelcome } from "./views/submissionWelcome";
 import { handleStatistics } from "./actions/statistics";
 import { handleReportAdult } from "./actions/reportAdult";
 import { handleReportAdultSubmission } from "./views/reportAdult";
+import { upgradedWebhook } from "./endpoints/webhooks/upgraded";
 
 const createLogger = (): ConsoleLogger => {
   const logger = new ConsoleLogger();
@@ -78,6 +79,7 @@ const createReceiver = (
   receiver.router.get("/", index);
   receiver.router.get("/ping", health);
   receiver.router.get("/up", health);
+  receiver.router.post("/webhook/upgraded/:token", upgradedWebhook);
 
   return receiver;
 };
@@ -112,7 +114,7 @@ const env = process.env.NODE_ENV!.toLowerCase();
 (async (): Promise<void> => {
   await app.start(process.env.PORT ?? 3000);
   console.log(colors.green(`⚡️ Bolt app is running in env ${env}!`));
-  
+
   let commitHash = process.env.GIT_COMMIT_SHORT_SHA;
   let fullcommitHash = process.env.GIT_COMMIT_SHA;
 
@@ -122,13 +124,13 @@ const env = process.env.NODE_ENV!.toLowerCase();
         .toString()
         .trim();
     }
-    
+
     if (!fullcommitHash) {
       fullcommitHash = execSync('git log --pretty=format:"%H" -n1')
         .toString()
         .trim();
     }
-    
+
     await app.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
       channel: process.env.SLACK_CHANNEL_DEV_SPAM ?? "None",
