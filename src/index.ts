@@ -27,6 +27,7 @@ import { handleStatistics } from "./actions/statistics";
 import { handleReportAdult } from "./actions/reportAdult";
 import { handleReportAdultSubmission } from "./views/reportAdult";
 import { upgradedWebhook } from "./endpoints/webhooks/upgraded";
+import { WebClient } from "@slack/web-api";
 
 const createLogger = (): ConsoleLogger => {
   const logger = new ConsoleLogger();
@@ -44,6 +45,9 @@ const createInstallationStore = (
     logger,
   });
 };
+
+export const slackClient = new WebClient(process.env.SLACK_BOT_TOKEN);
+
 
 const createReceiver = (
   installationStore: PrismaInstallationStore,
@@ -131,8 +135,7 @@ const env = process.env.NODE_ENV!.toLowerCase();
         .trim();
     }
 
-    await app.client.chat.postMessage({
-      token: process.env.SLACK_BOT_TOKEN,
+    await slackClient.chat.postMessage({
       channel: process.env.SLACK_CHANNEL_DEV_SPAM ?? "None",
       text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom: (${env})\n\(<https://github.com/hackclub/professor-bloom/commit/${fullcommitHash}|${commitHash}>)`,
     });

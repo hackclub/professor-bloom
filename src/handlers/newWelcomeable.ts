@@ -7,14 +7,14 @@ import { User } from "@slack/web-api/dist/response/UsersInfoResponse";
 
 dotenv.config();
 
+export type WelcomeableSource = "teamJoin" | "upgrade"
+// Assumes all keys are not undefined
+type DefinedUser = {
+  [K in keyof User]-?: User[K] 
+}
+
 const prisma = new PrismaClient();
 
-interface WelcomeableData {
-  is_bot: boolean;
-  id: string;
-  tz?: string;
-  source: "teamJoin" | "upgrade";
-}
 
 const getContinentFromTimezone = (timezone?: string): string => {
   if (!timezone) return "Unknown";
@@ -55,6 +55,8 @@ const doesWelcomeableExist = async (
 export const handleNewWeclomeable = async (
   user_id: string,
   client: WebClient,
+  source: WelcomeableSource
+
 ) => {
   if (await doesWelcomeableExist(user_id, prisma)) {
     throw new Error("User " + user_id + " already in the database");
@@ -64,7 +66,7 @@ export const handleNewWeclomeable = async (
   if (!uInfoReq.ok) {
     throw new Error("Error fetching user " + user_id);
   }
-  const user = uInfoReq?.user as User;
+  const user = uInfoReq?.user as DefinedUser;
   if (user.is_bot) {
     return;
   }
