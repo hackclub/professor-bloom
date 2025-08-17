@@ -26,6 +26,8 @@ import { submissionWelcome } from "./views/submissionWelcome";
 import { handleStatistics } from "./actions/statistics";
 import { handleReportAdult } from "./actions/reportAdult";
 import { handleReportAdultSubmission } from "./views/reportAdult";
+import { upgradedWebhook } from "./endpoints/webhooks/upgraded";
+import { WebClient } from "@slack/web-api";
 
 const createLogger = (): ConsoleLogger => {
   const logger = new ConsoleLogger();
@@ -43,6 +45,9 @@ const createInstallationStore = (
     logger,
   });
 };
+
+export const slackClient = new WebClient(process.env.SLACK_BOT_TOKEN);
+const enableTeamJoinEvent = process.env.ENABLE_TEAM_JOIN_EVENT
 
 const createReceiver = (
   installationStore: PrismaInstallationStore,
@@ -78,6 +83,7 @@ const createReceiver = (
   receiver.router.get("/", index);
   receiver.router.get("/ping", health);
   receiver.router.get("/up", health);
+  receiver.router.post("/webhook/upgraded/:token", upgradedWebhook);
 
   return receiver;
 };
@@ -103,16 +109,24 @@ app.action("view_statistics", handleStatistics);
 app.view("add_welcomer_modal", handleAddWelcomerSubmission);
 app.view("edit_prompt", handleEditPromptSubmission);
 app.view("report_adult", handleReportAdultSubmission);
+if (enableTeamJoinEvent){
 app.event("team_join", teamJoin);
+}
 app.event("app_home_opened", handleHomeTab);
 app.view("lemmewelcomethem_form", submissionWelcome);
 
 const env = process.env.NODE_ENV!.toLowerCase();
 
 (async (): Promise<void> => {
+  if (process.env.NODE_ENV !== "development" && process.env.UPGRADE_WEBHOOK_TOKENS === "first second"){
+    logger.warn("!!!! Using default (and vulnerable) webhook tokens in not DEV enviroment.")
+  }
+  if (!enableTeamJoinEvent) {
+    logger.warn("Ignoring team join events as defined in the process environment.")
+  }
   await app.start(process.env.PORT ?? 3000);
   console.log(colors.green(`⚡️ Bolt app is running in env ${env}!`));
-  
+
   let commitHash = process.env.GIT_COMMIT_SHORT_SHA;
   let fullcommitHash = process.env.GIT_COMMIT_SHA;
 
@@ -122,15 +136,14 @@ const env = process.env.NODE_ENV!.toLowerCase();
         .toString()
         .trim();
     }
-    
+
     if (!fullcommitHash) {
       fullcommitHash = execSync('git log --pretty=format:"%H" -n1')
         .toString()
         .trim();
     }
-    
-    await app.client.chat.postMessage({
-      token: process.env.SLACK_BOT_TOKEN,
+
+    await slackClient.chat.postMessage({
       channel: process.env.SLACK_CHANNEL_DEV_SPAM ?? "None",
       text: `Professor Bloom enters his ${env} garden, and inspects his garden of flowers. :sunflower: :tulip: :rose: :hibiscus: :blossom: :cherry_blossom: (${env})\n\(<https://github.com/hackclub/professor-bloom/commit/${fullcommitHash}|${commitHash}>)`,
     });
