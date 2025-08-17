@@ -115,6 +115,8 @@ settings:
 
    DATABASE_URL="postgres://<username>:<password>@localhost:5432/<database>?schema=bloom"
    SHADOW_DATABASE_URL="postgres://<username>:<password>@localhost:5432/<database>?schema=bloom_shadow"
+   UPGRADE_WEBHOOK_TOKENS="first second"
+   #ENABLE_TEAM_JOIN_EVENT=Uncomment to enable the team_join event
    ```
 
    Replace the values with your actual parameters.
