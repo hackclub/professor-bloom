@@ -32,6 +32,11 @@ features:
   bot_user:
     display_name: Bloom Dev
     always_online: true
+  shortcuts:
+    - name: Report adult
+      type: message
+      callback_id: message_adult_report
+      description: Reports this message's author for being an adult.
 oauth_config:
   redirect_urls:
     - YOUR_NGROK_URL/slack/oauth_redirect

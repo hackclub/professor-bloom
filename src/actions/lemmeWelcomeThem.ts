@@ -180,6 +180,9 @@ export const handleLemmeWelcomeThem = async ({ ack, body, client, action }) => {
       isEnterpriseInstall: body.isEnterpriseInstall,
     });
     userToken = installation.user.token;
+    if (!userToken) {
+      throw new Error("empty token provided")
+    }
   } catch (error) {
     console.error("Error fetching user token:", error);
     await client.chat.postEphemeral({

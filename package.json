@@ -28,7 +28,6 @@
     "@bufbuild/protobuf": "^1.10.1",
     "@connectrpc/connect": "^1.6.1",
     "@connectrpc/connect-node": "^1.6.1",
-    "@cskartikey/bolt-prisma": "^1.0.5",
     "@prisma/client": "^5.22.0",
     "@slack/bolt": "^3.22.0",
     "@slack/logger": "^4.0.0",
@@ -42,7 +41,8 @@
     "express": "^4.21.2",
     "node-cron": "^3.0.3",
     "nodemon": "^3.1.10",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "bloom-bolt-prisma": "file:./packages/bloom-bolt-prisma"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
