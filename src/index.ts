@@ -28,6 +28,7 @@ import { handleReportAdult } from "./actions/reportAdult";
 import { handleReportAdultSubmission } from "./views/reportAdult";
 import { upgradedWebhook } from "./endpoints/webhooks/upgraded";
 import { WebClient } from "@slack/web-api";
+import { handleMessageAdultReport } from "./actions/messageAdultReport";
 
 const createLogger = (): ConsoleLogger => {
   const logger = new ConsoleLogger();
@@ -74,7 +75,7 @@ const createReceiver = (
       "im:write",
       "mpim:history",
     ],
-    installerOptions: { directInstall: true, userScopes: ["chat:write"] },
+    installerOptions: { directInstall: true, userScopes: ["chat:write"], },
     installationStore,
     logger,
   });
@@ -102,6 +103,7 @@ const app = new App({
 
 app.action("lemmewelcomethem", handleLemmeWelcomeThem);
 app.action("report-adult", handleReportAdult);
+app.shortcut("message_adult_report", handleMessageAdultReport)
 app.action("edit_welcome_template", handleEditTemplate);
 app.action("add_welcomer", handleAddWelcomer);
 app.action("welcomer_actions", handleWelcomerActions);

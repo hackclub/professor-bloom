@@ -1,25 +1,50 @@
+import { SlackAction, SlackViewAction, SlackViewMiddlewareArgs } from "@slack/bolt";
+import { WebClient } from "@slack/web-api";
+import { slackClient } from "../index";
+
+export type validReportSources = "msg" | "wlc";
+
 export const handleReportAdultSubmission = async ({
   ack,
   view,
   body,
-  client,
 }) => {
+
+  const client = slackClient;
   await ack();
   const userId = body.user.id;
   const metadata = view.private_metadata;
-  const [reportedUserId, messageTs] = metadata.split(":");
+  const [reportedUserId, messageTs, reportSource, channelId ]: [string,string,validReportSources,string?] = metadata.split(":");
   const reasonBlock = view.state.values.adult_reason;
-  const communicatedBlock = view.state.values.communicated;
   const reason = reasonBlock["report_adult-action"].value;
-  const communicated =
-    communicatedBlock["communicated-action"].selected_option.value;
 
+  const communicatedBlock = view.state.values.communicated;
+  let communicated = "";
+  if (communicatedBlock) {
+    communicated = communicatedBlock["communicated-action"].selected_option.value;
+  }
+
+  let reportedMessageUrl: undefined | string = undefined;
+    if (channelId && reportSource == "msg") {
+      reportedMessageUrl = (await client.chat.getPermalink({channel:channelId,message_ts:messageTs})).permalink;
+    }
+  
   await client.chat.postMessage({
-    channel: process.env.SLACK_FD_LOGS,
-    text: `:rotating_light: <@${userId}> has reported <@${reportedUserId}> as an adult. :rotating_light:\n\n*Reason:*\n\`\`\`${reason}\`\`\`\n\n*Confirmed in DMs:* ${communicated == "yes" ? ":white_check_mark:" : ":red-x:"}\n\n_Please react to this message with :white_check_mark: once dealt with._`,
+    channel: process.env.SLACK_FD_LOGS!!,
+    text: `:rotating_light: <@${userId}> has reported <@${reportedUserId}> as an adult through ${reportSource == "msg" ? "a message":"a welcome"}. :rotating_light:
+    
+*Reason:*
+\`\`\`${reason}\`\`\`
+    
+${reportedMessageUrl &&`*Reported message:* ${reportedMessageUrl}`}    
+${reportSource === "wlc" ? `*Confirmed in DMs:* ${communicated == "yes" ? ":white_check_mark:" : ":red-x:"}` : ""}
+    
+_Please react to this message with :white_check_mark: once dealt with._`,
   });
+
+  if (reportSource == "wlc") {
   await client.chat.update({
-    channel: process.env.SLACK_CHANNEL_WELCOMERS,
+    channel: process.env.SLACK_CHANNEL_WELCOMERS!!,
     ts: messageTs,
     blocks: [
       {
@@ -55,4 +80,6 @@ export const handleReportAdultSubmission = async ({
       },
     ],
   });
+  }
+
 };

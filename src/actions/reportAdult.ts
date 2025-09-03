@@ -83,7 +83,7 @@ const openReportAdultModal = async (
           },
         },
       ],
-      private_metadata: `${userId}:${messageTs}`,
+      private_metadata: `${userId}:${messageTs}:wlc`,
     },
   });
 };
