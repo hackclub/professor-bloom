@@ -127,6 +127,7 @@ class PrismaInstallationStore {
             }
         }
         if (row !== null) {
+            const userMatch = query.userId === row.userId;
             logger === null || logger === void 0 ? void 0 : logger.debug(`#fetchInstallation found the installation data ${commonLogPart}`);
             const installation = {
                 team: row.teamId ?
@@ -142,14 +143,14 @@ class PrismaInstallationStore {
                     } :
                     undefined,
                 enterpriseUrl: row.enterpriseUrl || undefined,
-                user: {
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                user: userMatch ? {
+                    // return an empty token if the userIDs don't match
                     id: row.userId,
                     token: row.userToken || undefined,
                     refreshToken: row.userRefreshToken || undefined,
                     expiresAt: row.userTokenExpiresAt ? Math.floor(row.userTokenExpiresAt.getTime() / 1000) : undefined,
                     scopes: (_a = row.userScopes) === null || _a === void 0 ? void 0 : _a.split(','),
-                },
+                } : { id: "", token: "", scopes: [] },
                 bot: row.botId && row.botUserId && row.botToken ?
                     {
                         id: row.botId,
