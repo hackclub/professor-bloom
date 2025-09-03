@@ -7,5 +7,6 @@ If you have updated this dep, remember to build before commiting.
 To build
 ```sh
 pnpm install
+pnpm run prisma
 pnpm run build
 ```

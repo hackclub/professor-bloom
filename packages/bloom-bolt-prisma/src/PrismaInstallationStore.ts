@@ -39,11 +39,11 @@ export default class PrismaInstallationStore implements InstallationStore {
     this.historicalDataEnabled = options.historicalDataEnabled !== undefined ?
       options.historicalDataEnabled : true;
     this.onFetchInstallation = options.onFetchInstallation !== undefined ?
-      options.onFetchInstallation : async (_) => {};
+      options.onFetchInstallation : async (_) => { };
     this.onStoreInstallation = options.onStoreInstallation !== undefined ?
-      options.onStoreInstallation : async (_) => {};
+      options.onStoreInstallation : async (_) => { };
     this.onDeleteInstallation = options.onDeleteInstallation !== undefined ?
-      options.onDeleteInstallation : async (_) => {};
+      options.onDeleteInstallation : async (_) => { };
 
     this.logger.debug(`PrismaInstallationStore has been initialized (clientId: ${this.clientId})`);
   }
@@ -187,16 +187,16 @@ export default class PrismaInstallationStore implements InstallationStore {
           scopes: row.userScopes?.split(','),
         },
         bot:
-            row.botId && row.botUserId && row.botToken ?
-              {
-                id: row.botId,
-                userId: row.botUserId,
-                token: row.botToken,
-                refreshToken: row.botRefreshToken || undefined,
-                expiresAt: row.botTokenExpiresAt ? Math.floor(row.botTokenExpiresAt.getTime() / 1000) : undefined,
-                scopes: row.botScopes?.split(',') || [],
-              } :
-              undefined,
+          row.botId && row.botUserId && row.botToken ?
+            {
+              id: row.botId,
+              userId: row.botUserId,
+              token: row.botToken,
+              refreshToken: row.botRefreshToken || undefined,
+              expiresAt: row.botTokenExpiresAt ? Math.floor(row.botTokenExpiresAt.getTime() / 1000) : undefined,
+              scopes: row.botScopes?.split(',') || [],
+            } :
+            undefined,
         incomingWebhook: row.incomingWebhookUrl ?
           {
             url: row.incomingWebhookUrl,
@@ -219,9 +219,19 @@ export default class PrismaInstallationStore implements InstallationStore {
     }
 
     logger?.debug(
-      `#fetchInstallation didn't return any installation data ${commonLogPart}`,
+      `#fetchInstallation didn't return any installation data. Passing nullInstallation ${commonLogPart}`,
     );
-    throw new Error(`No installation data found ${commonLogPart}`);
+
+    const nullInstallation: Installation<"v2", boolean> = {
+      user: {
+        id: '',
+        token: "",
+        scopes: [],
+      },
+      team: { id: "" },
+      enterprise: { id: "" }
+    };
+    return nullInstallation;
   }
 
   // eslint-disable-next-line class-methods-use-this

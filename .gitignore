@@ -8,4 +8,4 @@ prisma/dev.db-journal
 src/gen
 yarn.lock
 db/*
-dist
+/dist
