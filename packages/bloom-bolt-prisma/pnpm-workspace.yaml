@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - nx
+  - prisma
+  - sqlite3

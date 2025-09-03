@@ -17,9 +17,6 @@ importers:
       '@connectrpc/connect-node':
         specifier: ^1.6.1
         version: 1.6.1(@bufbuild/protobuf@1.10.1)(@connectrpc/connect@1.6.1(@bufbuild/protobuf@1.10.1))
-      '@cskartikey/bolt-prisma':
-        specifier: ^1.0.5
-        version: 1.0.5(prisma@5.22.0)
       '@prisma/client':
         specifier: ^5.22.0
         version: 5.22.0(prisma@5.22.0)
@@ -44,6 +41,9 @@ importers:
       airtable:
         specifier: ^0.12.2
         version: 0.12.2
+      bloom-bolt-prisma:
+        specifier: file:./packages/bloom-bolt-prisma
+        version: file:packages/bloom-bolt-prisma(prisma@5.22.0)
       colors:
         specifier: ^1.4.0
         version: 1.4.0
@@ -89,9 +89,6 @@ packages:
     resolution: {integrity: sha512-KchMDNtU4CDTdkyf0qG7ugJ6qHTOR/aI7XebYn3OTCNagaDYWiZUVKgRgwH79yeMkpNgvEUaXSK7wKjaBK9b/Q==}
     peerDependencies:
       '@bufbuild/protobuf': ^1.10.0
-
-  '@cskartikey/bolt-prisma@1.0.5':
-    resolution: {integrity: sha512-Bip7vVQQ8l/PsOr3oTogjZD3y4aJs2+okhJ1hkDDitUeqGOs01la17brRg11ZZiFhrGqd/tLaQU2I5plriKuog==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -330,6 +327,9 @@ packages:
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
+
+  bloom-bolt-prisma@file:packages/bloom-bolt-prisma:
+    resolution: {directory: packages/bloom-bolt-prisma, type: directory}
 
   body-parser@1.20.3:
     resolution: {integrity: sha512-7rAxByjUMqQ3/bHJy7D6OGXvx/MMc4IqBn/X0fcM1QUcAItpZrBEYhWGem+tzXH90c+G01ypMcYJBO9Y30203g==}
@@ -1206,16 +1206,6 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 1.10.1
 
-  '@cskartikey/bolt-prisma@1.0.5(prisma@5.22.0)':
-    dependencies:
-      '@prisma/client': 3.15.2(prisma@5.22.0)
-      '@slack/logger': 3.0.0
-      '@slack/oauth': 2.6.3
-      '@types/node': 17.0.45
-    transitivePeerDependencies:
-      - debug
-      - prisma
-
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
@@ -1532,6 +1522,16 @@ snapshots:
   balanced-match@1.0.2: {}
 
   binary-extensions@2.3.0: {}
+
+  bloom-bolt-prisma@file:packages/bloom-bolt-prisma(prisma@5.22.0):
+    dependencies:
+      '@prisma/client': 3.15.2(prisma@5.22.0)
+      '@slack/logger': 3.0.0
+      '@slack/oauth': 2.6.3
+      '@types/node': 17.0.45
+    transitivePeerDependencies:
+      - debug
+      - prisma
 
   body-parser@1.20.3:
     dependencies:

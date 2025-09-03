@@ -3,7 +3,7 @@ dotenv.config();
 
 import { execSync } from "child_process";
 import { PrismaClient } from "@prisma/client";
-import { PrismaInstallationStore } from "@cskartikey/bolt-prisma";
+import { PrismaInstallationStore } from "bloom-bolt-prisma";
 import { App, ExpressReceiver } from "@slack/bolt";
 import { ConsoleLogger, LogLevel } from "@slack/logger";
 import colors from "colors";
