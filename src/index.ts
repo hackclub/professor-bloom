@@ -85,6 +85,7 @@ const createReceiver = (
   receiver.router.get("/ping", health);
   receiver.router.get("/up", health);
   receiver.router.post("/webhook/upgraded/:token", upgradedWebhook);
+  receiver.router.post("/webhook/charon/:token", upgradedWebhook);
 
   return receiver;
 };

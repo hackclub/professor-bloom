@@ -7,7 +7,8 @@ import { User } from "@slack/web-api/dist/response/UsersInfoResponse";
 
 dotenv.config();
 
-export type WelcomeableSource = "teamJoin" | "upgrade"
+export type WelcomeableSource =/*Legacy teamJoin*/ "teamJoin" | "legacy_upgrade" |
+/*Charon types:*/ "promotion" | "join" 
 // Assumes all keys are not undefined
 type DefinedUser = {
   [K in keyof User]-?: User[K] 
@@ -55,7 +56,9 @@ const doesWelcomeableExist = async (
 export const handleNewWeclomeable = async (
   user_id: string,
   client: WebClient,
-  source: WelcomeableSource
+  source: WelcomeableSource,
+  program_id?: string,
+  program_name?: string
 
 ) => {
   if (await doesWelcomeableExist(user_id, prisma)) {
@@ -98,7 +101,7 @@ export const handleNewWeclomeable = async (
   );
 
   let joinReason = "Unknown";
-  if (userEmail) {
+  if (userEmail && !program_id) {
     try {
 
     const records = await base("Join Requests")
@@ -131,7 +134,15 @@ export const handleNewWeclomeable = async (
         type: "header",
         text: {
           type: "plain_text",
-          text: source == "teamJoin" ? "Someone new joined the slack! :partyparrot:": "Someone was upgraded to a full user! :partyparrot:",
+          text: source === "teamJoin"
+            ? "Someone new joined the Slack! :partyparrot:"
+            : source === "join"
+            ? "Someone joined via Charon! :surprised:"
+            : source === "promotion"
+            ? "New user promoted! :yay:"
+            : source === "legacy_upgrade"
+            ? "Webhook upgrade dispatched! :partyparrot:"
+            : "New welcomeable!",
           emoji: true,
         },
       },
@@ -154,10 +165,17 @@ export const handleNewWeclomeable = async (
           },
           {
             type: "mrkdwn",
-            text: `*:earth_americas: Region:*\n${continent}`,
+            text: `*:earth_americas: Timezone:*\n${user.tz_label}`,
           },
         ],
       },
+      (program_id && program_name) ? {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `*:seedling: Program: ${program_name} [${program_id}]`
+        }
+      } :
       {
         type: "section",
         text: {
