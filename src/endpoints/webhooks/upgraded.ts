@@ -10,7 +10,7 @@ function isValidWebhookData(data: any) {
 
 import { Request, Response } from "express";
 import { app, slackClient } from "../../index";
-import { handleNewWeclomeable } from "../../handlers/newWelcomeable";
+import { handleNewWelcomeable } from "../../handlers/newWelcomeable";
 import { WebClient } from "@slack/web-api";
 const valid_upgrade_webhook_tokens =
   process.env.UPGRADE_WEBHOOK_TOKENS?.split(" ");
@@ -23,7 +23,7 @@ export async function upgradedWebhook(req: Request, res: Response) {
     return res.status(400).json({ message: "malformed request" });
 
   try {
-    await handleNewWeclomeable(body.user_id, slackClient, "legacy_upgrade");
+    await handleNewWelcomeable(body.user_id, slackClient, "legacy_upgrade");
   } catch (error) {
     console.error("Error handling new upgrade:", error);
     return res.status(500).json({ message: "internal server error" });

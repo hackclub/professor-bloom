@@ -53,7 +53,7 @@ const doesWelcomeableExist = async (
   return false;
 };
 
-export const handleNewWeclomeable = async (
+export const handleNewWelcomeable = async (
   user_id: string,
   client: WebClient,
   source: WelcomeableSource,
@@ -173,7 +173,7 @@ export const handleNewWeclomeable = async (
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*:seedling: Program: ${program_name} [${program_id}]`
+          text: `*:seedling: Program:* ${program_name} [${program_id}]`
         }
       } :
       {

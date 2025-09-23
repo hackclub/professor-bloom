@@ -29,6 +29,7 @@ import { handleReportAdultSubmission } from "./views/reportAdult";
 import { upgradedWebhook } from "./endpoints/webhooks/upgraded";
 import { WebClient } from "@slack/web-api";
 import { handleMessageAdultReport } from "./actions/messageAdultReport";
+import { charonWebhook } from "./endpoints/webhooks/charon";
 
 const createLogger = (): ConsoleLogger => {
   const logger = new ConsoleLogger();
@@ -85,7 +86,7 @@ const createReceiver = (
   receiver.router.get("/ping", health);
   receiver.router.get("/up", health);
   receiver.router.post("/webhook/upgraded/:token", upgradedWebhook);
-  receiver.router.post("/webhook/charon/:token", upgradedWebhook);
+  receiver.router.post("/webhook/charon/:token", charonWebhook);
 
   return receiver;
 };
