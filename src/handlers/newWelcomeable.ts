@@ -165,7 +165,7 @@ export const handleNewWelcomeable = async (
           },
           {
             type: "mrkdwn",
-            text: `*:earth_americas: Timezone:*\n${user.tz_label}`,
+            text: `*:earth_americas: Timezone:*\n${user.tz.split("/").join(": ").replaceAll("_"," ")}`,
           },
         ],
       },
