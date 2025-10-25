@@ -74,6 +74,7 @@ const createReceiver = (
       "im:history",
       "im:read",
       "im:write",
+      "users:read",
       "mpim:history",
     ],
     installerOptions: { directInstall: true, userScopes: ["chat:write"], },

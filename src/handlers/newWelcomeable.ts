@@ -61,6 +61,9 @@ export const handleNewWelcomeable = async (
   program_name?: string
 
 ) => {
+
+  console.info(`Handling new welcomeable ${user_id} from ${source}`);
+
   if (await doesWelcomeableExist(user_id, prisma)) {
     throw new Error("User " + user_id + " already in the database");
   }
