@@ -33,7 +33,7 @@ import { charonWebhook } from "./endpoints/webhooks/charon";
 
 const createLogger = (): ConsoleLogger => {
   const logger = new ConsoleLogger();
-  logger.setLevel(LogLevel.WARN);
+  logger.setLevel(LogLevel.DEBUG);
   return logger;
 };
 
