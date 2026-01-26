@@ -33,7 +33,7 @@ import { charonWebhook } from "./endpoints/webhooks/charon";
 
 const createLogger = (): ConsoleLogger => {
   const logger = new ConsoleLogger();
-  logger.setLevel(LogLevel.WARN);
+  logger.setLevel(LogLevel.DEBUG);
   return logger;
 };
 
@@ -74,6 +74,7 @@ const createReceiver = (
       "im:history",
       "im:read",
       "im:write",
+      "users:read",
       "mpim:history",
     ],
     installerOptions: { directInstall: true, userScopes: ["chat:write"], },
@@ -113,9 +114,9 @@ app.action("view_statistics", handleStatistics);
 app.view("add_welcomer_modal", handleAddWelcomerSubmission);
 app.view("edit_prompt", handleEditPromptSubmission);
 app.view("report_adult", handleReportAdultSubmission);
-if (enableTeamJoinEvent){
+//TODO use the ENABLE_TEAM_JOIN_EVENT
 app.event("team_join", teamJoin);
-}
+
 app.event("app_home_opened", handleHomeTab);
 app.view("lemmewelcomethem_form", submissionWelcome);
 
