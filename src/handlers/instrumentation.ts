@@ -1,0 +1,20 @@
+interface UserTelData {
+    slack_id: string;
+    timestamp?: string; // RFC 3339 style datetime
+    timezone: string;
+    JoinOrigin: "unknown" //TODO
+}
+
+export async function instrumentationRecordUser(u:UserTelData) {
+    const ORCHID_API_KEY = process.env.ORCHID_API_KEY;
+    if (!ORCHID_API_KEY) return;
+
+    await fetch("https://orchid.professorbloom.hackclub.com/instrumentation/user", {
+        headers: {
+            "Content-Type":"application/json",
+            "X-API-Key":ORCHID_API_KEY
+        },
+        method: "POST",
+        body: JSON.stringify(u)
+    });
+}

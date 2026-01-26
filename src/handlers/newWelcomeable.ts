@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { WebClient } from "@slack/web-api";
 import { app } from "src";
 import { User } from "@slack/web-api/dist/response/UsersInfoResponse";
+import { instrumentationRecordUser } from "./instrumentation";
 
 dotenv.config();
 
@@ -76,6 +77,13 @@ export const handleNewWelcomeable = async (
   if (user.is_bot) {
     return;
   }
+
+  await instrumentationRecordUser({
+    JoinOrigin: "unknown",
+    slack_id: user.id,
+    timezone: user.tz
+    //TODO pull join date from slack
+  })
 
   await prisma.slackStats.upsert({
     where: { id: 1 },
