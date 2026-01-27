@@ -2,7 +2,8 @@ interface UserTelData {
     slack_id: string;
     timestamp?: string; // RFC 3339 style datetime
     timezone: string;
-    JoinOrigin: "unknown" //TODO
+    JoinOrigin: "unknown"; //TODO
+    is_restricted: boolean;
 }
 
 export async function instrumentationRecordUser(u:UserTelData) {

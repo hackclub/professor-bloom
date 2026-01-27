@@ -81,8 +81,9 @@ export const handleNewWelcomeable = async (
   await instrumentationRecordUser({
     JoinOrigin: "unknown",
     slack_id: user.id,
-    timezone: user.tz
+    timezone: user.tz,
     //TODO pull join date from slack
+    is_restricted: user.is_restricted
   })
 
   await prisma.slackStats.upsert({
